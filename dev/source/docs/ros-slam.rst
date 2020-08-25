@@ -48,14 +48,14 @@ Install more packages
 
 ::
 
-    sudo apt-get install ros-kinetic-desktop-full
+    sudo apt-get install ros-melodic-desktop-full
 
 - OR install each of these individual packages (this list is not yet complete):
 
 ::
 
-    sudo apt-get install ros-kinetic-tf ros-kinetic-tf-conversions ros-kinetic-laser-geometry
-    sudo apt-get install ros-kinetic-cv-bridge ros-kinetic-image-transport
+    sudo apt-get install ros-melodic-tf ros-melodic-tf-conversions ros-melodic-laser-geometry
+    sudo apt-get install ros-melodic-cv-bridge ros-melodic-image-transport
     sudo apt-get install qt4-qmake qt4-dev-tools
     sudo apt-get install protobuf-compiler
 

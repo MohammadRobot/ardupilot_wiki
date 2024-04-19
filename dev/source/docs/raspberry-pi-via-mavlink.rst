@@ -79,7 +79,7 @@ Configure the Wifi
 
 If desired, the Raspberry Pi's Wifi can be configured to create a 
 Wifi access point. This will allow other clients to connect to
-the RPi and stream telemetry. See the `official RPi documention
+the RPi and stream telemetry. See the `official RPi documentation
 <https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md>`__
 for details.
 
@@ -113,10 +113,10 @@ The APSync image will have the serial port (UART) already enabled.
 MAVProxy
 --------
 
-MAVProxy can be used to to send commands to the flight controller from the Pi. 
+MAVProxy can be used to send commands to the flight controller from the Pi. 
 It can also be used to route telemetry to other network endpoints.
 
-This assumes you have a SSH connection to the Pi. If not, see see the 
+This assumes you have a SSH connection to the Pi. If not, see 
 the `RPi Documentation <https://www.raspberrypi.org/documentation/remote-access/ssh/>`__.
 
 See the :ref:`MAVProxy Documentation<mavproxy:mavproxy-downloadinstalllinux>` for install instructions
@@ -149,6 +149,17 @@ command to display the ``ARMING_CHECK`` parameters value
    accidentally assigned these files to another username, such as
    Root.
 
+To run MAVProxy as a telemetry router on the Pi, set it up to run as a service and use the --daemon and --non-interactive parameters. For example:
+
+::
+
+   mavproxy.py --daemon --non-interactive --default-modules='' --continue --master=/dev/serial0 --baudrate 1500000 --out=udp:pro:14550
+
+.. note::
+
+    If the Raspberry PI is heavily loaded, mavproxy.py might not provide a reliable connecton for telemetry routing. This is more likely on older/slower
+    devices like the Raspberry PI Zero. If this happens, consider using mavlink-routerd. See this post on the ArduPilot forum for a detailed discussion: `MavLink Routing with Router software <https://discuss.ardupilot.org/t/mavlink-routing-with-a-router-software/82138#solution-1-3>`__.
+
 Mavlink-router
 --------------
 
@@ -176,6 +187,11 @@ to include:
     Address = 0.0.0.0
     Port = 14550
     PortLock = 0
+
+mavp2p
+------
+
+mavp2p is a flexible and efficient Mavlink proxy / bridge / router, implemented in the form of a command-line utility. Functioning like MAVProxy's router, mavp2p can replace MAVProxy in companion computers with limited resources. mavp2p has pre-built binaries for most common Raspberry PI architectures. `MAVp2p <https://github.com/aler9/mavp2p>`__.
 
 DroneKit
 --------

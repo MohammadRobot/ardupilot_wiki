@@ -6,26 +6,30 @@ Items in Master Branch Only
 
 This lists features or changes merged in master and build in the "latest" firmware, but not in a stable or beta release yet. They have passed all test suites and usually have already been flight tested. These items are considered in the broad flight testing stage and test users are encouraged. Eventually, they will released in a beta, then stable release.
 
+.. note:: Currently firmware is in the 4.5 beta orstable stage. Items listed are in "latest" but not 4.5 beta and stable releases.
+
+
+[site wiki="plane,copter,rover"]
+
 
 .. toctree::
     :maxdepth: 1
-[site wiki="plane"]
-    Airmode <airmode>
-[/site]
-[site wiki="copter,plane"]
-    In-Flight FTT and filter control <common-imu-fft>
-[/site]
-[site wiki="copter,plane,rover"]
-    Hott Telem (already in Plane release) <common-hott-telemetry>
-    RunCam Control <common-camera-runcam>
-[/site]
+
     Other wiki changes <common-future-wiki-changes>
-
-[site wiki="plane"]
-- :ref:`Change to PID scaling in QuadPlane Tailsitters <4.1-gainscaling>`
 [/site]
-- :ref:`Camera Trigger MAV Command change <mav_cmd_do_set_cam_trigg_dist>`
+[site wiki="rover"]
+
+.. toctree::
+    :maxdepth: 1
 
 
 
-[copywiki destination="plane,copter,rover,dev"]
+[/site]
+
+[site wiki="blimp"]
+.. toctree::
+    :maxdepth: 1
+
+    Other wiki changes <common-future-wiki-changes>
+[/site]
+[copywiki destination="plane,copter,rover,blimp"]

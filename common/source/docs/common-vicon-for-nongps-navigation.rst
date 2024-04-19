@@ -1,6 +1,6 @@
 .. _common-vicon-for-nongps-navigation:
 
-[copywiki destination="copter,rover"]
+[copywiki destination="copter,rover,blimp"]
 
 =======================================
 Using a Vicon indoor positioning system
@@ -44,11 +44,30 @@ Hardware Setup
 You will need a low-latency network link from your GCS computer to the
 copter, and from the GCS to your Vicon server. The recommened method
 is to use ethernet to the Vicon server and use a ESP8266 WiFi link
-running `mavest8266 <common-esp8266-telemetry>` on the copter.
+running `mavest8266 <common-esp8266-telemetry>`_ on the copter.
 
-You will also need to calibrate your Vicon, and ensure you have 4 good
-reflective markers on the vehicle positioned to give a good lock in
-the Vicon.
+Vicon System Setup
+==================
+
+- The Vicon system should be correctly calibrated. The origin should be set using the calibration wand. In the Vicon Tracker software, the Z-axis (shown in blue) of the Vicon system world frame should point up. We will call the X-axis (red) as North, and the Y-axis (green) as West.
+- The UAV should have a minimum of 4 reflective markers to ensure an accurate fix. Any reflective surfaces on the UAV should be covered with masking tape to avoid spurious detections.
+- Place the UAV in the Vicon space so that the forward direction of the autopilot is facing 'North'. (Figure 1)
+- In the Vicon Tracker, select all of the markers and create a new object for the UAV. The coordinate frame of the UAV should then be aligned with the Vicon world frame, so that X is forward, Y is Left and Z is up. (Figure 2)
+
+.. figure:: ../../../images/vicon-frame-reference.jpg
+    :target: ../_images/vicon-frame-reference.jpg
+    
+    Figure 1: Example of how UAV should be positioned when creating the Vicon Object. The forward direction is aligned with the X-axis.
+
+.. figure:: ../../../images/vicon-alignment.png
+    :target: ../_images/vicon-alignment.png
+
+    Figure 2: Screenshot from Vicon Tracker software, showing world coordinate frame (bottom left) aligned with UAV coordinate frame. The origin of the object frame should be approximately where the autopilot is located.
+
+
+.. warning::
+
+    These coordinate frame conventions apply to MAVProxy version 1.8.36 and above. Ensure you are using an up-to-date version.
 
 Software Setup
 ==============
@@ -65,17 +84,18 @@ pyvicon
 =======
 
 You will need to install the `pyvicon
-<https://github.com/tridge/pyvicon>` python package, using a python
+<https://github.com/tridge/pyvicon>`_ python package, using a python
 version of at least 3.6. To install pyvicon you will need to also
-install the Vicon SDK. Due to missing files in the `ViconDataStream
-SDK <https://www.vicon.com/products/software/datastream-sdk>`
-you will need to combine some files from 1.7.1 with 1.8.0.
+install the Vicon SDK, version 1.10 or later, from `ViconDataStream
+SDK <https://www.vicon.com/products/software/datastream-sdk>`_
 
 Note that pyvicon does not build with python2.
 
 Once you have the SDK setup, you should install pyvicon like this:
 
- - python3 setup.py build install --user
+.. code:: bash
+
+    python3 setup.py build install --user
 
 You will also need to add $HOME/.local/bin to your $PATH.
 
@@ -84,19 +104,25 @@ pymavlink
 
 You will need a pymavlink version of at least 2.3.8. Install with:
 
- - python3 -m pip install --upgrade --user pymavlink
+.. code:: bash
+
+    python3 -m pip install --upgrade --user pymavlink
 
 MAVProxy Setup
 ==============
 
-You will need MAVProxy version of at least 1.8.11. Install with:
+You will need MAVProxy version of at least 1.8.36. Install with:
 
- - python3 -m pip install --upgrade --user mavproxy
+.. code:: bash
+
+    python3 -m pip install --upgrade --user mavproxy
 
 You will also need some other python3 libraries, install with:
 
- - sudo apt-get install libgtk-3-dev
- - python3 -m pip install --user pathlib2 wxpython matplotlib
+.. code:: bash
+
+    sudo apt-get install libgtk-3-dev
+    python3 -m pip install --user pathlib2 wxpython matplotlib
 
 Next you should put the IP address of your vicon server in your
 /etc/hosts file, so that you can do "ping vicon". The name 'vicon' is
@@ -114,7 +140,9 @@ will need to set:
 
 Next start MAVProxy like this:
 
- - mavproxy.py --master :14550 --aircraft MyQuad --console --map
+.. code:: bash
+
+    mavproxy.py --master :14550 --aircraft MyQuad --console --map
 
 For more details see the :ref:`MAVProxy documentation <mavproxy:home>`
 
@@ -142,7 +170,9 @@ Starting Vicon
 
 Inside MAVProxy load the vicon module with:
 
- - module load vicon
+.. code:: bash
+
+    module load vicon
 
 If it doesn't load correctly then enable debugging with "set moddebug
 3" then try to load the module again.

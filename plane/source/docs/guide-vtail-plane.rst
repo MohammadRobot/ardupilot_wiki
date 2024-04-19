@@ -85,7 +85,7 @@ at a time to avoid confusion.
    <tr><td>Incorrect for both movements (pitch and roll)</td><td>Change the reversal of that channel</td><tr>
    </table>
 
-.. note:: :ref:`KFF_RDDRMIX<KFF_RDDRMIX>` mut not be set to 0 for rudder setup. If the 
+.. note:: :ref:`KFF_RDDRMIX<KFF_RDDRMIX>` must not be set to 0 for rudder setup. If the 
           plane actually needs 0, then reset it after this setup.
 
           :ref:`KFF_RDDRMIX<KFF_RDDRMIX>` should cause the tail surfaces point in the 
@@ -145,7 +145,7 @@ when servos stall).
 To adjust the throw, change the SERVOn_MIN and SERVOn_MAX values. The
 defaults are 1100 to 1900. On many aircraft, more throw may be desired.
 Changing throws to 1000 to 2000 or beyond is normal. Make sure that 
-the servos are still moving when nearing the extrememe values.
+the servos are still moving when nearing the extreme values.
 
 .. tip:: To get to maximum throw on V-Tail control surfaces, command pitch and yaw 
          at the same time in MANUAL mode.
@@ -159,9 +159,9 @@ movement. For example, if :ref:`MIXING_GAIN<MIXING_GAIN>` is 0.5, then the follo
 are used:
 
 - LEFT_VTAIL = (yaw+pitch)*0.5
-- RIGHT_VTAIL = (yaw-pitch)*0.5
+- RIGHT_VTAIL = (-yaw+pitch)*0.5
 
-Adjusting the :ref:`MIXING_GAIN<MIXING_GAIN>` controls the percentabe of throws from pitch vs yaw.
+Adjusting the :ref:`MIXING_GAIN<MIXING_GAIN>` controls the percentage of throws from pitch vs yaw.
 
 Final Setup
 ===========
@@ -169,5 +169,5 @@ Final Setup
 After completing the V-Tail guide, move onto the final setup of
 the aircraft.
 
-- :ref:`ESC Calibration <guide-esc-calibration>`
+- :ref:`ESC Calibration <common-esc-calibration>`
 - :ref:`Center of Gravity <guide-center-of-gravity>`

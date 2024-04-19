@@ -1,5 +1,5 @@
 .. _common-3dr-radio-advanced-configuration-and-technical-information:
-
+[copywiki destination="plane,copter,rover,blimp"]
 ==================================
 SiK Radio — Advanced Configuration
 ==================================
@@ -200,6 +200,8 @@ no ECC enabled will be good.
 Error correction
 ================
 
+.. warning:: Using error correction is no longer recommended due to the range reduction and the fact that some newer radio chips are not capable of doing ECC and will fail to function if this option is selected.
+
 As mentioned above, the radios support a 12/24 Golay error correcting
 code if you set the ECC parameter to 1. This means that for every 12
 bits of data the radio will send 24 bits, calculating the bits using
@@ -320,7 +322,7 @@ your responsibility to ensure any use of it is compliant with local
 rules.
 
 For example, if your local rules allow for a maximum of 30dBm (1W) EIRP,
-then if you use a amplifier with a 12dB transmit gain, and an antenna
+then if you use an amplifier with a 12dB transmit gain, and an antenna
 with 3dBi gain, then you will need to set TXPOWER to at most 14.
 
 If you don't know how to calculate it, we've made a tutorial for you

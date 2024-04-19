@@ -30,7 +30,7 @@ Clone ArduPilot repository
 
     ::
 
-         git config --global url."https://" 
+         git config --global url."https://".insteadOf git://
 
     to use https protocols instead of the default git:// prefix.
 
@@ -52,7 +52,7 @@ Reload the path (log-out and log-in to make permanent):
 
 Now you should be able to build with waf as described in `BUILD.md <https://github.com/ArduPilot/ardupilot/blob/master/BUILD.md>`__.
 
-.. note:: At this point you have already installed the MAVProxy Ground Control Station (MAVProxy GCS) and are also ready to do Software In the Loop (SITL) simulations of the vehicle code. See :ref:`sitl-simulator-software-in-the-loop`  and :ref:`setting-up-sitl-on-linux` . You are ready to not only build the code, but run your build in the Ardupilot SITL simulator.
+.. note:: At this point you have already installed the MAVProxy Ground Control Station (MAVProxy GCS) and are also ready to do Software In the Loop (SITL) simulations of the vehicle code. See :ref:`sitl-simulator-software-in-the-loop`  and :ref:`setting-up-sitl-on-linux`. You are ready to not only build the code, but run your build in the ArduPilot SITL simulator.
 
 
 .. youtube:: 4B8BVskH0vc
@@ -124,12 +124,16 @@ You need the specific gcc-arm cross-compiler linked above. You need to unpack it
 ::
 
     cd TARGET_DIR
-    tar -xjvf gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2
+    tar -xjvf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
 
 and then add the bin directory from the tarball to your $PATH by editing
-the $HOME/.bashrc file and adding a line like this to the end. TARGET_DIR is the location choose previouly where you unpack the toolchain:
+the $HOME/.bashrc file and adding a line like this to the end. TARGET_DIR is the location chosen previously where you unpacked the toolchain:
 
-``export PATH=$PATH:TARGET_DIR/gcc-arm-none-eabi-6-2017-q2/bin``
+``export PATH=$PATH:TARGET_DIR/gcc-arm-none-eabi-10-2020-q4-major/bin``
+
+.. note::
+
+    Versions of ArduPilot before 4.1 must use the following compiler, gcc-arm-none-eabi-6-2017-q2, which can be found `here <https://firmware.ardupilot.org/Tools/STM32-tools/>`__.
 
 Permissions
 -----------
@@ -160,22 +164,6 @@ compiler into /usr/lib/ccache like this:
     sudo ln -s /usr/bin/ccache arm-none-eabi-gcc
 
 Then add /usr/lib/ccache to the front of your $PATH
-
----------
-
-Additional Steps for macOS mojave
-=================================
-Due to some changes binutils installed via brew have stopped working for macOS mojave leading to crashing builds. So if installed, remove via following command:
-
-::
-
-    brew uninstall binutils
-
-Also you will need to install the c++ include headers to /usr/include to do that. Run the following in commandline and follow the installation routine:
-
-::
-
-    open /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg
 
 ---------
 

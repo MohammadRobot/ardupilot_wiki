@@ -24,7 +24,7 @@ Hardware
 
 There are many choices and options for ArduPilot FCs, see `this list of currently supported boards <common-autopilots.html>`__. 
 Omnibus F4 Pro or Matek F405-Wing are good choices for a basic FPV plane
-configuration, since they integrate OSD and power module functions into one board. This guide will assume a compareable integrated peripheral setup containing onboard battery monitoring and OSD. Additionally, the following items are required:
+configuration, since they integrate OSD and power module functions into one board. This guide will assume a comparable integrated peripheral setup containing onboard battery monitoring and OSD. Additionally, the following items are required:
 
 -  GPS
 -  RX
@@ -106,7 +106,7 @@ Now setup your TX to provide the ability to output six different levels on Chann
 (the default flight mode channel can be adjusted by the :ref:`FLTMODE_CH<FLTMODE_CH>` param, it defaults to channel 8). 
 See setup instructions `for various transmitters <common-rc-transmitter-flight-mode-configuration.html>`__.
 Now that the TX can select 6 modes (usually using combining two three-position-switches), set your flight modes for each switch position.
-It is strongly recommended to initally use two positions for MANUAL mode, allowing you to "bailout" to MANUAL no matter what
+It is strongly recommended to initially use two positions for MANUAL mode, allowing you to "bailout" to MANUAL no matter what
 position the second switch is in. It's a lot easier to remember to just slam one switch down( or up)
 without worrying about the state of the other mode switch. Then set the TX switches to produce the following modes:
 
@@ -133,9 +133,12 @@ After initial flights and tuning, you can change modes to whatever are desired.
 Go to the SETUP -> Mandatory Hardware -> Accelerometer Calibration tab and
 perform the full calibration. For the level position carefully level the wings laterally, and have the wing chord 
 set a few degrees (~ 3 deg) nose up, since this is the normal cruise attitude for level flight for most planes.
-This can be reset using the LEVEL only calibration button at any time. Also check that the orientation of the 
-autopilot is correct. Moving the plane should be correctly reflected in the HUD display of MP. 
-Otherwise, you will need to manually change the :ref:`AHRS_ORIENTATION<AHRS_ORIENTATION>` parameter appropriately.
+This can be reset using the LEVEL only calibration button at any time.
+
+.. note:: this can only change the difference between the autopilot's plane and "level" by 10 degrees maximum. If more is needed (in the case that the autopilot is mounted slightly downward, for example), then you can use :ref:`PTCH_TRIM_DEG<PTCH_TRIM_DEG>` to alter the AOA manually. See :ref:`common-accelerometer-calibration` and :ref:`tuning-cruise` for more details.
+
+Also check that the orientation of the autopilot is correct. Moving the plane should be correctly reflected in the HUD display of MP. 
+Otherwise, you will need to manually change the :ref:`AHRS_ORIENTATION<AHRS_ORIENTATION>` parameter appropriately and re-calibrate. A reboot is required after changing this parameter.
 
 -  Servo Functions
 
@@ -160,9 +163,10 @@ and rebooting/reconnecting to the FC.
 
 -  Receiver RSSI
 
-ArduPilot supports either analog RSSI or PWM RSSI (also known as "Digital RSSI") embedded in an RC channel. For
-analog (voltage-type), set :ref:`RSSI_TYPE<RSSI_TYPE>` =1 and reboot, for PWM set :ref:`RSSI_TYPE<RSSI_TYPE>` =2. The remaining RSSI
-parameters will not appear until this parameter is set and saved and your FC rebooted.
+ArduPilot supports either analog RSSI or PWM RSSI (also known as "Digital RSSI") embedded in an RC channel. ArduPilot also supports RSSI provided
+directly by the RC protocol (like CRSF). For
+analog (voltage-type), set :ref:`RSSI_TYPE<RSSI_TYPE>` =1 and reboot, for PWM set :ref:`RSSI_TYPE<RSSI_TYPE>` =2, and for RC protocol provided set :ref:`RSSI_TYPE<RSSI_TYPE>` =3 . The remaining RSSI
+parameters will not appear until this parameter is set and saved and your FC rebooted. For Analog RSSi adjust these:
 
     :ref:`RSSI_ANA_PIN<RSSI_ANA_PIN>` =x (see :ref:`this page for details <common-rssi-received-signal-strength-indication>`)
     
@@ -210,13 +214,13 @@ using the following formula:
 
 - Compass
 
-Tradition fixed wing Arduplane does not need a compass for good performance,  as opposed to Copter or
-Quadplane which require a compass for yaw alignment. Even if you have a compass, disable it until you have
+Tradition fixed wing ArduPlane does not need a compass for good performance,  as opposed to Copter or
+QuadPlane which require a compass for yaw alignment. Even if you have a compass, disable it until you have
 everything else working. Then you can expand to it. Uncheck "Use this compass" for every compass in Mission Planner's SETUP/Compass screen.
 
 - Airspeed
 
-Arduplane does not need an airspeed sensor for basic performance. A fairly accurate synthetic airspeed estimate is calculated and gives
+ArduPlane does not need an airspeed sensor for basic performance. A fairly accurate synthetic airspeed estimate is calculated and gives
 good basic performance. In order to display this in the OSD, you will need to set :ref:`ARSPD_TYPE<ARSPD_TYPE>` =0. Feel free to add/enable a pitot sensor later to improve cruise flight target airspeed precision, or automatic landing airspeed control.
 
 - Other Parameters
@@ -229,13 +233,13 @@ good basic performance. In order to display this in the OSD, you will need to se
 
 3. Set :ref:`TRIM_THROTTLE<TRIM_THROTTLE>` to the expected cruise throttle. Usually a little below midthrottle.
 
-4. If you have a small flying wing (like Z-84), it might be required to decrease your default :ref:`PTCH2SRV_P<PTCH2SRV_P>` value if it is too aggressive and causes flutter. In that case, reduce the default by half.
+4. If you have a small flying wing (like Z-84), it might be required to decrease your default ``PTCH2SRV_P`` value if it is too aggressive and causes flutter. In that case, reduce the default by half.
 
 
 5. ARMING: Leave all arming parameters at default. There is no reason to disable these safety checks. You should be able to get a GPS lock even indoors with modern GPS units. Inability to arm due to one of these checks failing means something has to be corrected. This adds noticeable safety by keeping you from accidentally starting your flight without your autopilot being in a fully functional state.
 
 All other parameters can be left to default. However, after you get some flights, you might want to play with:
-:ref:`LIM_PITCH_MAX<LIM_PITCH_MAX>` , :ref:`LIM_ROLL_CD<LIM_ROLL_CD>` , and :ref:`FBWB_CLIMB_RATE<FBWB_CLIMB_RATE>` . These are pretty docile at default values.
+:ref:`PTCH_LIM_MAX_DEG<PTCH_LIM_MAX_DEG>`, :ref:`ROLL_LIMIT_DEG<ROLL_LIMIT_DEG>`, and :ref:`FBWB_CLIMB_RATE<FBWB_CLIMB_RATE>`. These are pretty docile at default values.
 
 -  ESC Calibration
 
@@ -263,7 +267,7 @@ Also recheck your battery is properly placed to for the desired CG. ARM the plan
 Switch into AUTO mode. Now the TAKEOFF command will be activated and the plane will go to :ref:`THR_MAX<THR_MAX>` even though the throttle stick is at idle. Toss it and it will climb straight up to desired altitude. It will then go into RTL since no other waypoint is loaded.
 Be sure to move the throttle stick from idle to midstick after launch to avoid unexpected
 throttle idle if you have to switch to STAB or MANUAL for some reason. Also be prepared for
-another :ref:`THR_MAX<THR_MAX>` climb to the RTL altitude (ALT_HOLD_RTL) if your TAKEOFF altitude is below this.
+another :ref:`THR_MAX<THR_MAX>` climb to the RTL altitude (RTL_ALTITUDE) if your TAKEOFF altitude is below this.
 
 Now switch to CRUISE mode and let the airframe cruise level without input for several intervals of ten seconds.
 This allows the :ref:`SERVO_AUTO_TRIM<SERVO_AUTO_TRIM>` function to adjust the servo trims accordingly. After having performed level flight with no inputs for a sufficiently long accumulated periods (trim is updated every 10 seconds of flight with no pilot inputs), switch into Manual mode to verify correct trims are now set.

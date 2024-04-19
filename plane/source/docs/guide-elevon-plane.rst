@@ -4,6 +4,9 @@
 Elevon Planes
 =============
 
+.. image:: ../images/elevons.gif
+
+
 Elevon planes (also known as delta-wings) are popular for their
 simplicity and robustness.
 
@@ -33,7 +36,7 @@ RC Input Setup & Reversal
 Set up your :ref:`RC inputs <rc-throw-trim>` through the calibration
 process, and verify them for reversal. Reversals are critical to the
 process. Commanding pitch up and roll right must result in higher PWM
-values for RCn_in channnels. If the value does not respond correctly
+values for RCn_in channels. If the value does not respond correctly
 reverse the channel before continuing.
 
 You can connect your 3 servo cables to any output of your autopilot,
@@ -67,18 +70,18 @@ PROVIDING RC INPUT is:
 If your movements are incorrect then you need to adjust which servo
 output is left/right and the reversals of each elevon.
 
-The parameters you should adjust are :ref:`SERVO1_REVERSED<SERVO1_REVERSED>` , :ref:`SERVO2_REVERSED<SERVO2_REVERSED>` ,
-:ref:`SERVO1_FUNCTION<SERVO1_FUNCTION>` and :ref:`SERVO2_FUNCTION<SERVO2_FUNCTION>` .
+The parameters you should adjust are :ref:`SERVO1_REVERSED<SERVO1_REVERSED>`, :ref:`SERVO2_REVERSED<SERVO2_REVERSED>`,
+:ref:`SERVO1_FUNCTION<SERVO1_FUNCTION>` and :ref:`SERVO2_FUNCTION<SERVO2_FUNCTION>`.
 
 If your left elevon on servo 1 is moving the wrong way for both pitch and
 roll corrections, set :ref:`SERVO1_REVERSED<SERVO1_REVERSED>` to 1.
 
 If your left elevon on servo 1 responds correctly to pitch, but incorrectly
-to roll, change the :ref:`SERVO1_FUNCTION<SERVO1_FUNCTION>` .
+to roll, change the :ref:`SERVO1_FUNCTION<SERVO1_FUNCTION>`.
 
 Repeat the servo reversal or function change for the right elevon.
 
-.. note:: In rare instances, both servo 1 and 2 will indivicually respond
+.. note:: In rare instances, both servo 1 and 2 will individually respond
           correctly with the same FUNCTION. This is OK.
           
 .. note:: while rolling the aircraft the autopilot will automatically
@@ -94,7 +97,7 @@ Verify RC Inputs
 Now that the elevons are configured correctly, verify your RC inputs.
 In FBWA with the airplane level, command pitch-up from your transmitter
 and confirm that the elevons both rise. Command a roll to the right
-from your transmitter and confirm that the the right elevon rises and
+from your transmitter and confirm that the right elevon rises and
 the left elevon lowers. If this is incorrect, read the :ref:`RC inputs <rc-throw-trim>` 
 page to fix your rc
 
@@ -166,5 +169,5 @@ Final Setup
 After completing the above you should move onto the final setup of
 your aircraft.
 
-- :ref:`ESC Calibration <guide-esc-calibration>`
+- :ref:`ESC Calibration <common-esc-calibration>`
 - :ref:`Center of Gravity <guide-center-of-gravity>`

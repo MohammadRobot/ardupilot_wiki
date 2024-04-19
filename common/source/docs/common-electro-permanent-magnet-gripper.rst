@@ -57,7 +57,7 @@ instructions for setting up manual control through a transmitter.
 
 Control using the transmitter is accomplished by setting up "RC Pass
 Through" which means the "input" channel from the transmitter is passed
-through to the Pixhawk/APM's "output" channel of the same number.  For
+through to the autopilot's "output" channel of the same number.  For
 Copter this means you must have a transmitter capable of 9 or more
 channels because the EPM is connected to output ch9 (or higher).
 
@@ -89,10 +89,10 @@ properly.
 
 Note: it is also possible (if using an older style, non ppm-sum
 receiver) to directly connect one signal wire from the receiver to the
-EPM's PWM pin thus by passing the Pixhawk/APM2 completely.  The image
+EPM's PWM pin thus bypassing the autopilot completely.  The image
 below shows the power line between the receiver and EPM connected but
 this is not correct and is quite dangerous because power spikes could
-pass through the receiver to the Pixhawk/APM2.  Only PWM and Ground
+pass through the receiver to the autopilot.  Only PWM and Ground
 should be connected.  The EPM should be powered from a BEC (not shown
 below).
 
@@ -117,9 +117,8 @@ Parameters List and set the :ref:`SERVO9_FUNCTION<SERVO9_FUNCTION>` (or RC9_FUNC
 Note that if the EPM is connected to Pixhawk's AUX OUT 2 then
 :ref:`SERVO10_FUNCTION<SERVO10_FUNCTION>` (or RC10_FUNCTION) should be set instead, etc.
 
-Create the mission you wish to fly and add pairs of ``DO_SET_SERVO``
-commands to grip or release the cargo and then return the EPM to
-neutral.
+Create the mission you wish to fly and add pairs of ``DO_GRIPPER``
+commands to grip or release the cargo .The EPM is returned to neutral after each command.
 
 -  "Ser No" should be set according to which output the EPM is connected
    to (i.e. "9" = Pixhawk's AUX OUT 1, "10" = APM2's RC10).
@@ -129,7 +128,7 @@ neutral.
 .. image:: ../../../images/EPM_Mission.jpg
     :target: ../_images/EPM_Mission.jpg
 
-In the example above the vehicle takes off to 20m, flies west 150m where
+In the example above the vehicle takes off to 20ft, flies west 548ft where
 it delays for 5 seconds, releases the cargo, delays another 5 seconds
 and then returns home.
 
@@ -196,7 +195,7 @@ In addition to magnetic interference, if a weak BEC is used a voltage
 drop may be noticed.  For example the BEC in a 3DR ESC leads to a drop
 of 0.4V when the EPM is activated.  This is normally not a concern
 because the BEC should only be powering the servo rail of the
-Pixhawk/APM2 and so the CPU's voltage should be unaffected.  This can be
+autopilot, so the CPU's voltage should be unaffected.  This can be
 tested by graphing the "hwvoltage" field in the same way the "magfield"
 was checked above.  Ideally this test should be performed when connected
 via :ref:`Telemetry <common-telemetry-landingpage>`\ because a USB cable
@@ -205,5 +204,5 @@ will also provide power the CPU and may hide any voltage disturbance.
 User Video
 ==========
 
-..  youtube:: _iyTo9H7HAk#t=190
+..  youtube:: _iyTo9H7HAk&t=190s
     :width: 100%

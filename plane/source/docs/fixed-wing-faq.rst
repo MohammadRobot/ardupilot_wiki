@@ -53,18 +53,12 @@ How do I setup reverse throttle on a IC plane?
 
 Some planes (mostly nitro or petrol planes) have a reversed throttle
 servo, so lower PWM values on the throttle channel gives more throttle
-not less. To set up Plane 3.7 or earlier to handle this you need to change 3 settings:
-
--  set :ref:`RC3_REVERSED<RC3_REVERSED>` to -1
--  setup your transmitter for reverse throttle
--  change :ref:`THR_FS_VALUE<THR_FS_VALUE>` to a high value instead of a low value (eg.
-   2100 instead of 900). It needs to be a higher PWM value than you will
-   use in normal flight
+not less.
 
 After you setup reverse throttle make sure you test correct failsafe by
 turning off your transmitter while on the ground.
 
-For plane 3.8.0 or later, the servo library allows you to reverse the 
+The servo library allows you to reverse the 
 throttle output channel without affecting your RC inputs or failsafe configuration.
 to do this, set :ref:`SERVO3_REVERSED<SERVO3_REVERSED>` to 1.
 
@@ -163,7 +157,7 @@ this test is less in recent releases of the firmware.
 
 The reason is the new :ref:`stall prevention code <stall-prevention>`. When the plane is on
 the ground the airspeed is very low, so is always under the minimum
-airspeed set in :ref:`ARSPD_FBW_MIN<ARSPD_FBW_MIN>` . That means the maximum roll demand is
+airspeed set in :ref:`AIRSPEED_MIN<AIRSPEED_MIN>`. That means the maximum roll demand is
 limited to 25 degrees, which means the amount of demanded aileron
 surface movement is less than it would be without stall prevention.
 
@@ -230,11 +224,11 @@ sensor data. The techniques are:
 When no airspeed sensor is available some parameters are not used for
 some purposes:
 
--  the :ref:`TRIM_ARSPD_CM<TRIM_ARSPD_CM>` parameter is not used as an airspeed target in
+-  the :ref:`AIRSPEED_CRUISE<AIRSPEED_CRUISE>` parameter is not used as an airspeed target in
    auto flight. Instead the :ref:`TRIM_THROTTLE<TRIM_THROTTLE>` parameter is used as base
    throttle, with extra throttle added/removed to retain the target
    altitude
--  the :ref:`ARSPD_FBW_MIN<ARSPD_FBW_MIN>` and :ref:`ARSPD_FBW_MAX<ARSPD_FBW_MAX>` parameters are not used for
+-  the :ref:`AIRSPEED_MIN<AIRSPEED_MIN>` and :ref:`AIRSPEED_MAX<AIRSPEED_MAX>` parameters are not used for
    airspeed limiting in TECS, but they are still used for the stall
    prevention code, using the synthetic airspeed value
 

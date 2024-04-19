@@ -1,104 +1,122 @@
 .. _quadplane-frame-setup:
 
+=====================
 QuadPlane Frame setup
 =====================
 
 The QuadPlane code supports several frame arrangements of quadcopter,
-hexacopter, octacopter and octaquad multicopter frames.
+hexacopter, octacopter and octaquad multicopter frames which use lifting motors in addition to the normal forward motor(s). Also configurations in which the VTOL motors tilt for transitions or control, as well as choice between horizontal VTOL stance or vertical (Tailsitters).
 
-Motor Ordering
---------------
+Tailsitters
+===========
+
+Frame setup for Tailsitters is in this section: :ref:`guide-tailsitter`. Once the frame is configured, proceed with the other :ref:`quadplane-setup` instructions.
+
+Plane VTOL Motor Configurations
+===============================
+
+These configurations add multicopter style lifting motors to a conventional fixed wing configuration. Some or all of these motors may also be configured as tilting motors to be used in fixed wing flight instead of the normal fixed forward motor(s).
+
+Frame Types and Classes
+-----------------------
+
+To use a different frame type you can set :ref:`Q_FRAME_CLASS<Q_FRAME_CLASS>` and
+:ref:`Q_FRAME_TYPE<Q_FRAME_TYPE>`. 
+
+Frame Class
+~~~~~~~~~~~
+
+:ref:`Q_FRAME_CLASS<Q_FRAME_CLASS>` designates the number of motors used, and can be:
+
+-  1 for quad
+-  2 for hexa
+-  3 for octa
+-  4 for octaquad
+-  5 for Y6 (ignores all following frame types except 10 and 11, all others result in Y6A configuration)
+-  7 for tri (ignores all following frame types except 6 for reversed tricopter)
+-  10 for tailsitter using single/dual motors (ignores all following frame types)
+
+Frame Type
+~~~~~~~~~~
+
+Within each of these frame classes the :ref:`Q_FRAME_TYPE<Q_FRAME_TYPE>` chooses the motor
+layout and rotation directions.
+
+-  0 for plus frame
+-  1 for X frame
+-  2 for V frame
+-  3 for H frame
+-  6 for reversed X frame
+-  10 for Y6B only
+-  11 for FireFly6Y6 (Y6F only)
+
+.. note:: if selecting X or H frame, see :ref:`Frame Twist Tips <h-vs-x-mixing>`
+
+VTOL Motor Ordering
+-------------------
 
 The motor order and output channel is the same as for copter (see :ref:`Copter motor layout <copter:connect-escs-and-motors>`)
-except that the default output channel numbers start at 5 instead of 1.
+except that the default output channel numbers usualy start at 5 instead of 1, since the basic plane control surfaces are usually setup by default already on outputs 1 thru 4 when Q_ENABLE is set to 1 and the autopilot rebooted to setup QuadPlane.
 
 .. note:: :ref:`guide-tailsitter` configuration is a special case. See Tailsitter notes below
 
 For example, with the default Quad-X frame the motors are on outputs
 5 to 8. The arrangement is:
 
--  **Output 5:** Front right motor, counter-clockwise
--  **Output 6:** Rear left motor, counter-clockwise
--  **Output 7:** Front left motor, clockwise
--  **Output 8:** Rear right motor, clockwise
+-  **Output 5:** Motor 1 - Front right motor, counter-clockwise
+-  **Output 6:** Motor 2 - Rear left motor, counter-clockwise
+-  **Output 7:** Motor 3 - Front left motor, clockwise
+-  **Output 8:** Motor 4 - Rear right motor, clockwise
 
 You can remember the clockwise/counter-clockwise rule by "motors turn
 in towards the fuselage", except for the H configuration, there all directions are inverted!
    
-Another common setup is an octa-quad, which uses the following ordering
+Another common setup is an OctoQuad X8, which uses the following ordering
 
--  **Output 5:** Front right top motor, counter-clockwise
--  **Output 6:** Front left top motor, clockwise
--  **Output 7:** Rear left top motor, counter-clockwise
--  **Output 8:** Rear right top motor, clockwise
--  **Output 9:** Front left bottom motor, counter-clockwise
--  **Output 10:** Front right bottom motor, clockwise
--  **Output 11:** Rear right bottom motor, counter-clockwise
--  **Output 12:** Rear left bottom motor, clockwise
+-  **Output 5:** Motor 1 - Front right top motor, counter-clockwise
+-  **Output 6:** Motor 2 - Front left top motor, clockwise
+-  **Output 7:** Motor 3 - Rear left top motor, counter-clockwise
+-  **Output 8:** Motor 4 - Rear right top motor, clockwise
+-  **Output 9:** Motor 5 - Front left bottom motor, counter-clockwise
+-  **Output 10:** Motor 6 - Front right bottom motor, clockwise
+-  **Output 11:** Motor 7 - Rear right bottom motor, counter-clockwise
+-  **Output 12:** Motor 8 - Rear left bottom motor, clockwise
 
 You can remember the clockwise/counter-clockwise rule for an octa-quad
 by "top motors turn in towards the fuselage, bottom motors turn out
 away from the fuselage".
-   
+
+For a Tricopter configuration, the default output assignment is:
+
+-  **Output 5:** Motor 1 - Front right motor, looking from above
+-  **Output 6:** Motor 2 - Front left motor
+-  **Output 8:** Motor 4 - Rear motor
+-  **Output 11:** Motor 7 - Tail Tilt Servo (see below)
+
 The normal plane outputs are assumed to be on 1 to 4 as usual. Only
-vertical lift outputs (5 to 8 on a quad setup) run at high PWM rate
-(400Hz). In a quad setup you can also use channels 9 to 14 in any way
-you like, just as with the normal Plane code.
+vertical lift outputs (5 to 8 on a quad setup) normally should be run at high PWM rate
+(400Hz). When using these default configurations, you can assigne other outputs to whatever functions you desire.
 
-You can optionally move the quad motors to be on any other channel above
-4, using the procedure outlined in the section further below.
-
-Frame Types and Classes
------------------------
-
-To use a different frame type you can set :ref:`Q_FRAME_CLASS<Q_FRAME_CLASS>` and
-:ref:`Q_FRAME_TYPE<Q_FRAME_TYPE>` . :ref:`Q_FRAME_CLASS<Q_FRAME_CLASS>` can be:
-
--  1 for quad
--  2 for hexa
--  3 for octa
--  4 for octaquad
--  5 for Y6
--  7 for Tri
--  10 for Tailsitter
-
-Within each of these frame classes the :ref:`Q_FRAME_TYPE<Q_FRAME_TYPE>` chooses the motor
-layout. For Tri and Y6 this parameter is ignored.
-
--  0 for plus frame
--  1 for X frame
--  2 for V frame
--  3 for H frame
--  11 for FireFly6Y6 (for Y6 only)
+You can optionally move the motors to be on any other channel, using the procedure outlined in the section further below.
 
 Tricopter
 ---------
 
-Frame Type 7 is Tricopter and can be either non-Tiltrotor configuration, or :ref:`Tiltrotor<guide-tilt-rotor>` configured using either Vectored or Non-Vectored yaw control. If using non-Tiltrotor or Non-Vectored Yaw Tilt-rotor, the yaw control output is setup as Motor 7 (``SERVOn_FUNCTION`` = 39) using a tilt mechanism for the yaw motor, Motor 4. You should set up the yaw servo’s maximum lean angle in degrees with :ref:`Q_M_YAW_SV_ANGLE<Q_M_YAW_SV_ANGLE>`. This lean angle assumes that ``SERVOn_MIN`` and ``SERVOn_MAX``, represent +/- 90 degrees, with ``SERVOn_TRIM`` representing 0 degrees lean.
+Frame Type 7 is Tricopter and can be either non-Tiltrotor, or a :ref:`Tiltrotor<guide-tilt-rotor>` configuration for the front motors, but using a separate servo to sideways tilt the rear motor for yaw control, or a :ref:`Tiltrotor<guide-tilt-rotor>` using Vectored Yaw control via the front tilting motors.
 
-Tailsitter
-----------
+If using a tilting yaw control, an output is setup as Motor 7 (``SERVOn_FUNCTION`` = 39) for a servo-controlled sideways tilt mechanism for the yaw motor, Motor 4. You should set up the yaw servo’s maximum lean angle in degrees with :ref:`Q_M_YAW_SV_ANGLE<Q_M_YAW_SV_ANGLE>` to prevent prop strikes to the ground or frame. This lean angle assumes that ``SERVOn_MIN`` and ``SERVOn_MAX``, represent +/- 90 degrees, with ``SERVOn_TRIM`` representing 0 degrees lean.
 
-Tailsitters mount the VTOL motors facing up when the QuadPlane's nose is pointing straight up, hence the name Tailsitter.
-
-Copter Tailsitter
------------------ 
-
-Copter Tailsitters :ref:`Q_FRAME_CLASS<Q_FRAME_CLASS>` is the same as a normal QuadPlane, but the  :ref:`Q_TAILSIT_MOTMX<Q_TAILSIT_MOTMX>` bitmask is non-zero, which sets which VTOL motors are active in normal Plane modes, but also indicates that it is a Copter Tailsitter frame. See :ref:`Tailsitter <guide-tailsitter>` section for more information
-
-Single/ Dual Motor Tailsitter
-------------------------------
-Single/ Dual Motor Tailsitters (:ref:`Q_FRAME_CLASS<Q_FRAME_CLASS>` =10) are a special case. Since this can be used on a conventional single motor plane for "3D" style flying, the standard single motor configuration with the Throttle (motor) output on SERVO3 is automatically configured. If you are using twin engines, then you may want to manually configure two outputs for Throttle Left and Throttle Right, instead of Throttle, if you want differential thrust. If you are using a twin, vectored thrust tailsitter, then you will need to manually configure four outputs for Throttle Left, Throttle Right, Left Motor Tilt and Right Motor Tilt. See :ref:`Tailsitter <guide-tailsitter>` section for more information
+.. note:: the rear motor tilt servo is not affected by :ref:`Q_TILT_MASK<Q_TILT_MASK>` or any other :ref:`Tiltrotor<guide-tilt-rotor>` related parameters since it is not involved with vertical or horizontal propulsion, only yaw control.
 
 Tilt-Rotors
------------
+===========
 
 See :ref:`guide-tilt-rotor`
 
 Using different channel mappings
 ================================
 
-You can remap what output channels the quad motors are on by setting
+You can remap what output channels the lifting motors are on by setting
 values for SERVOn_FUNCTION. This follows the same approach as :ref:`other output functions <common-rcoutput-mapping>`.
 
 .. note::
@@ -119,7 +137,7 @@ The output function numbers are:
 -  39: motor7
 -  40: motor8
 
-So to put your quad motors on outputs 9 to 12 (the auxillary channels on
+So to put your quad motors on outputs 9 to 12 (the auxiliary channels on
 a Pixhawk) you would use these settings in the advanced parameter list:
 
 -  :ref:`SERVO9_FUNCTION<SERVO9_FUNCTION>` = 33

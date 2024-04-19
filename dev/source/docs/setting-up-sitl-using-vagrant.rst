@@ -4,6 +4,10 @@
 Setting up SITL using Vagrant
 =============================
 
+Warning
+
+These instructions are out-of-date. We recommend Windows 10 or later users follow the instructions for :ref:`Setting up the Build Environment using WSL <building-setup-windows>` and :ref:`Setting up SITL on WSL <sitl-on-windows-wsl>`
+
 This article explains how to set up the :ref:`SITL ArduPilot Simulator <sitl-simulator-software-in-the-loop>` in a virtual machine
 environment using `Vagrant <https://www.vagrantup.com/>`__, and connect
 it to a Ground Control Station running on the host computer. This
@@ -50,9 +54,8 @@ Preconditions
 
 .. warning::
 
-   You must use the newer
-         version for the git submodule init step. After that setp you can
-         use an older version.
+   -  You must use the newer version for the git submodule(git 1.8.x or later) for initial step. 
+      After that step you can use an older version.
 
    -  Ensure that *git* is set to leave line endings untouched. Click on
       your new “Git Shell (or Bash)” Icon (the terminal was installed
@@ -84,10 +87,7 @@ Set up the Vagrant and the virtual machine
 
 #. Start a vagrant instance
 
-   -  Open a command prompt and navigate to any directory in the
-      `/ArduPilot/ardupilot/Tools/vagrant/ <https://github.com/ArduPilot/ardupilot/blob/master/Tools/vagrant/>`__
-      source tree.
-   -  Run the command:
+   -  Inside the ardupilot folder, run the command:
 
       ::
 
@@ -102,6 +102,14 @@ Set up the Vagrant and the virtual machine
        The first time you run the vagrant up command it will take some
        time complete. The command needs to fetch a Vagrant base VM and
        configure it with the development environment.
+
+    .. note::
+
+       On older Ubuntu versions the CA cetificate store shipped with Vagrant may be out of date.  You may need to set an environment variable before running vagrant:
+
+       ::
+
+	  export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
 #. Initialise git submodules
 

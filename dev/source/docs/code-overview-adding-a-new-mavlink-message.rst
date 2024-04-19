@@ -29,7 +29,7 @@ fit in with the existing `MAVLink messages <https://mavlink.io/en/>`__.
 For example, you might want to send a new navigation command to the
 vehicle so that it can perform a trick (like a flip) in the middle of a
 mission (i.e. in AUTO mode).  In this case, you would need a new
-MAV_CMD_NAV_TRICK similar to the MAV_CMD_NAV_WAYPOINT definition
+MAV_CMD_NAV_TRICK similar to the `MAV_CMD_NAV_WAYPOINT <https://mavlink.io/en/messages/common.html#MAV_CMD_NAV_WAYPOINT>`__  definition
 (search for "MAV_CMD_NAV_WAYPOINT" in the \ `MAVLink messages <https://mavlink.io/en/messages/common.html>`__ page).
 
 Alternatively, you may want to send down a new type of sensor data from
@@ -87,7 +87,7 @@ so you will need to rebuild pymavlink to include your custom message.
  
  - Remove the currently installed version of pymavlink. ``pip uninstall pymavlink``
  - Install the updated version. CD to ``ardupilot/modules/mavlink/pymavlink``
-   and run ``python setup.py install --user``
+   and run ``python3 setup.py install --user``
  - Mavproxy is now capable of sending or receiving the new message. To ask it
    to print out or send your message you need to implement a module. Modules
    are python plugins that allow you to add functionality to Mavproxy. By default
@@ -129,7 +129,7 @@ so you will need to rebuild pymavlink to include your custom message.
    This can be done by setting the relevant ``SERIALn_PROTOCOL`` parameters (e.g. ``SERIAL1_PROTOCOL``) to 2 and starting Mavproxy with the ``--mav20`` argument.
 
 **Step #6:** Consider contributing your code back to the main code base.
-Discuss this with other developers on `Gitter <https://gitter.im/ardupilot/ardupilot>`__ and/or
+Discuss this with other developers on `Discord <https://ardupilot.org/discord>`__ and/or
 :ref:`raise a pull request <submitting-patches-back-to-master>`. If
 you raise a pull request it is best to separate the change into at least
 two separate commits. One commit for the changes to the .xml files

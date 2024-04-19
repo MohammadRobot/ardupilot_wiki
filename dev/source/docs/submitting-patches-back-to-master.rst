@@ -17,10 +17,9 @@ This page provides advice to make the process go smoothly.
 Preparing commits
 -----------------
 
-- Commits should be **in a new branch** of your :ref:`fork <git-fork>`/:ref:`clone <git-clone>` (i.e. not "master").
+- Commits should be **in a new branch** of your :ref:`fork <git-fork>`/:ref:`clone <git-clone>` (i.e. not "master"). These should be done on a local branch and then pushed to your web-based fork of ArduPilot.
 
-- The new branch should be :ref:`up-to-date <git-rebase>` with `ArduPilot/master <https://github.com/ArduPilot/ardupilot>`__
-  and should not include any other changes.
+- The new branch should be :ref:`up-to-date <git-rebase>` with `ArduPilot/master <https://github.com/ArduPilot/ardupilot>`__  and should not include any other changes.
 
 - **Commits should be small and do just one thing.** If a change touches
   multiple libraries then there should be a separate commit per library,
@@ -52,8 +51,9 @@ Preparing commits
   to `online resources <http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html>`__
   to understand how to use this tool.
 
-- Do not submit patches with commented-out code or code that is never
-  reachable within ``#define`` s.
+- The commits of the change should be squashed (see :ref:`git-interactive-rebase`) into one commit and then the "Tools/gittools/git-subsystems-split" script run to create a single commit for each library module affected.
+
+- Do not submit patches with commented-out code or code that is never reachable within ``#define`` s.
 
 - Try to follow the :ref:`style guide <style-guide>` so your code fits in with the existing code.
   In particular, ensure your editor uses 4 spaces intead of tabs.
@@ -112,6 +112,6 @@ PRs are more likely to be merged quickly if:
 
 - The PR clearly states what changes in behaviour are expected
 - Good testing evidence is provided.  This could be graphs of logs recorded before and after the change
-- The PR is discussed on the :ref:`weekly dev call <ardupilot-discord-server>`.  To get the PR discussed add the "DevCallTopic" label.  If you are unable to add the label ping one of the developers on the `ArduPilot Gitter channel <https://gitter.im/ArduPilot/ardupilot>`__
+- The PR is discussed on the :ref:`weekly dev call <ardupilot-discord-server>`.  To get the PR discussed add the "DevCallTopic" label.  If you are unable to add the label ping one of the developers on `ArduPilot Discord <https://ardupilot.org/discord>`__
 
 It is very common, especially for large changes, for the core developers to ask you to modify the pull request to fit in better with the existing code base or resolve some knock-on impact that you may not have known about. Please don't take this the wrong way, we're definitely not trying to make your life difficult!

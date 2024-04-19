@@ -1,12 +1,20 @@
 .. _sitl-native-on-windows:
 
-==========================
-Setting up SITL on Windows
-==========================
+====================================================
+SITL setup on Windows using Cygwin (not recommended)
+====================================================
 
-SITL was originally developed on Linux, but can also be built and run *natively* Windows. It can also be run on a virtual machine (Linux) hosted on Windows, Mac OSX, or Linux.
+.. warning::
 
-This article shows how to build and run :ref:`SITL (Software In The Loop) <sitl-simulator-software-in-the-loop>` *natively* on Windows using Cygwin. These commands were tested on Windows 10 with :ref:`MAVProxy <mavproxy:home>` and Copter-4.0.0-dev.
+   These instructions are out-of-date.  We recommend Windows users follow the instructions for :ref:`Setting up the Build Environment using WSL <building-setup-windows>` and :ref:`Setting up SITL on WSL <sitl-on-windows-wsl>`
+
+SITL was originally developed on Linux, but can also be built and run *natively* on Windows. It can also be run on a virtual machine (Linux) hosted on Windows, Mac OSX, or Linux or by using the Windows Subsystem for Linux (WSL).
+
+Currently, the simplest way to run SITL on Windows is to build the code and simulate using WSL: in Windows 10 :ref:`building-setup-windows10_new`
+
+Prerequisites: 'Windows 10 64bit'  at a minimum, this will not work on , for example, Windows 7. It also will not run on any 32bit windows installation.
+
+The remainder of this article shows how to build and run :ref:`SITL (Software In The Loop) <sitl-simulator-software-in-the-loop>` *natively* on Windows using Cygwin. These commands were tested on Windows 10 with :ref:`MAVProxy <mavproxy:home>` and Copter-4.0.0-dev.
 
 .. figure:: ../images/MAVProxy_Map_GuidedCopter.jpg
    :target: ../_images/MAVProxy_Map_GuidedCopter.jpg
@@ -22,14 +30,14 @@ Installation steps
 
 .. tip::
 
-   Makes sure that Cygwin is in your PATH. As for troubleshooting, you may add a Windows environment variable called CYGWIN_HOME in your path pointing to your c:\cygwin\bin (if you installed at "C:"). You may check it by doing a Right-click on "My Computer" -> Properties -> Advanced -> Environment Variables.
+   Make sure that Cygwin is in your PATH. As for troubleshooting, you may add a Windows environment variable called CYGWIN_HOME in your path pointing to your c:\cygwin\bin (if you installed at "C:"). You may check it by doing a Right-click on "My Computer" -> Properties -> Advanced -> Environment Variables. In Windows Terminal using PowerShell use the command ``bash`` to access cygwin from PowerShell.
 
 Running SITL
 ============
       
 #. Open a Cygwin64 terminal from the start menu
 
-#. Navigate to one of the vehicle directories (in this case Copter) and call ``sim_vehicle.py`` to start SITL.  If you get a windows security alert for the the firewall, allow the connection. 
+#. Navigate to one of the vehicle directories (in this case Copter) and call ``sim_vehicle.py`` to start SITL.  If you get a windows security alert for the firewall, allow the connection. 
 
    ::
 

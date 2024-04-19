@@ -4,14 +4,16 @@
 Terrain Following (in Auto, Guided, etc)
 ========================================
 
-Copter 3.4 (and higher) support "terrain following" in nearly all modes including autonomous modes like :ref:`AUTO <auto-mode>`, :ref:`Guided <ac2_guidedmode>`, :ref:`RTL <rtl-mode>` and :ref:`Land <land-mode>`.  This feature allows the vehicle to climb or descend to maintain a specified distance above the terrain using either a :ref:`downward facing Lidar or Sonar <common-rangefinder-landingpage>` or from `SRTM <https://en.wikipedia.org/wiki/Shuttle_Radar_Topography_Mission>`__ data (aka terrain altitude data) provided by the ground station using a mapping service such as Google maps.  Details of how the SRTM data is used can be found on the :ref:`plane terrain following page <plane:common-terrain-following>`
+Copter supports "terrain following" in nearly all autonomous modes :ref:`AUTO <auto-mode>`, :ref:`Guided <ac2_guidedmode>`, :ref:`RTL <rtl-mode>` and :ref:`Land <land-mode>`.  This feature allows the vehicle to climb or descend to maintain a specified distance above the terrain using either a :ref:`downward facing Lidar or Sonar <common-rangefinder-landingpage>` or from `SRTM <https://en.wikipedia.org/wiki/Shuttle_Radar_Topography_Mission>`__ data (aka terrain altitude data) provided by the ground station using a mapping service such as Google maps or stored on the autopilot's SD card in the "Terrain" subdirectory.  Details of how the SRTM data is used and stored can be found on the :ref:`plane terrain following page <plane:common-terrain-following>`
 
 ..  youtube:: mT67QOAxuG8
     :width: 100%
+    
+See :ref:`common-understanding-altitude` for altitude definitions.    
 
 .. note::
 
-   :ref:`Loiter <loiter-mode>`, :ref:`PosHold <poshold-mode>` and :ref:`AltHold <altholdmode>` modes also support low altitude terrain following, called Surface Tracking.  Please refer to the :ref:`Surface Tracking <terrain-following-manual-modes>` wiki page.
+   :ref:`Loiter <loiter-mode>`, :ref:`PosHold <poshold-mode>` and :ref:`AltHold <altholdmode>` modes also support low altitude terrain following, called Surface Tracking. Please refer to the :ref:`Surface Tracking <terrain-following-manual-modes>` wiki page.
 
 Setting up a Mission to use Terrain data
 ========================================
@@ -26,9 +28,9 @@ Setting up a Mission to use Terrain data
 
 .. warning::
 
-    Do not set the :ref:`EK2_ALT_SOURCE <EK2_ALT_SOURCE>` or :ref:`EK3_ALT_SOURCE <EK3_ALT_SOURCE>` parameters.  These parameters should be left at "0" (barometer).
+    Do not set the :ref:`EK3_SRC1_POSZ <EK3_SRC1_POSZ>` to Rangefinder.  This parameter should be left at the default.
 
-    Do not set the :ref:`EK2_RNG_USE_HGT <EK2_RNG_USE_HGT>`  or :ref:`EK3_RNG_USE_HGT <EK3_RNG_USE_HGT>` parameters.  These parameters should be left at "-1".
+    Do not set :ref:`EK3_RNG_USE_HGT <EK3_RNG_USE_HGT>` parameter.  This parameter should be left at "-1".
 
 Sources of Terrain Data
 =======================
@@ -45,9 +47,11 @@ Alternatively, you can download a set of terrain data tiles for any anticipated 
 
 It will create tiles for the specified radius around a geographic location. Then you can download them, unzip and write in the APM/TERRAIN folder of the SD card.
 
-You can also download .zip files for entire continents, or individual tiles from `here <https://terrain.ardupilot.org/data/>`__.
+You can also download .zip files for entire continents, or individual tiles from `here <https://terrain.ardupilot.org/data/>`__. Note that ArduPilot 4.0.x and 4.1.x have different tilesets. Use the "continents"/"tiles" folders for ArduPilot 4.0.x, or use the "continentsapm41"/"tilesapm41" folders for ArduPilot 4.1.x. 
 
 .. warning:: A long standing bug in the downloaded terrain data files, which occasionally caused terrain data to be missing, even though supposedly downloaded, was fixed in Plane 4.0.6, Copter 4.0.4, and Rover 4.1. It will automatically be re-downloaded when connected to a compatible GCS. However, if you are relying on SD terrain data for an area and don't plan on being connected to a GCS when flying over it, or its not part of a mission, you should download the area data using the utility above, or from the linked tiles data repository and place on your SD card in the Terrain directory.
+
+.. warning:: ArduPilot 4.0.x and 4.1.x use different terrain tilesets. When upgrading from 4.0.x to 4.1.x, any tiles on the SD card will need to be re-downloaded. This will happen automatically when your GCS is connected to the Internet for areas covered by loaded missions and/or home location. Otherwise, you may set the :ref:`TERRAIN_MARGIN <TERRAIN_MARGIN>` to 50 to continue using the old tileset.
 
 Using Terrain Altitude during RTL and Land
 ==========================================

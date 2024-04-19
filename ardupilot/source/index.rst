@@ -1,10 +1,15 @@
 .. _home:
 
 ..  raw:: html
-
     <h1 style="text-align:center;">ArduPilot</h1>
 
-    <p style="text-align:left;">
+    <p style="text-align:center;color:green;"><strong>
+    ArduPilot is open source <u>software</u> that runs on a wide range of <u>hardware</u>.</strong>
+
+    <p style="text-align:center;color:red;"><strong>
+    Success with ArduPilot requires that the 'First Time Setup' and 'First Flight/Drive and Tuning' sections of the vehicle's documentation be read and followed!</strong>
+
+    <p style="text-align:left; color:black;">
 
     ArduPilot enables the creation and use of trusted, autonomous,
     unmanned vehicle systems for the peaceful benefit of
@@ -20,9 +25,6 @@
     have advanced functionality including real-time communication with
     operators. ArduPilot has a huge online community dedicated to
     helping users with questions, problems, and solutions </p>
-
-    <p style="text-align:center;">Copter -- Plane -- Rover -- Sub -- Antenna Tracker</p>
-
 
 .. image:: ../../images/home_ardupilot.jpg
     :target: _images/home_ardupilot.jpg
@@ -55,7 +57,7 @@ devices such as ESC's, servos, gimbals and other peripherals.
     </td>
     <td width="27%">
 
-:ref:`Firmware <common-downloads_firmware>`- is the code running on the controller.
+:ref:`Firmware <common-downloads_firmware>` is the code running on the controller.
 You choose the firmware to match your vehicle and mission: :ref:`Copter <copter:home>`, `Plane <https://ardupilot.org/plane/index.html>`__,
 :ref:`Rover <rover:home>`, Sub, or :ref:`Antenna Tracker <antennatracker:home>`.
 
@@ -72,9 +74,8 @@ The choice is yours -- one autopilot for any mission.
     </td>
     <td width="27%">
 
-:ref:`Software <common-choosing-a-ground-station>` is your interface to the
-controller. Also called a Ground Control Station (GCS), the software can run
-on PC's or mobile devices.
+:ref:`Ground Control Station <common-choosing-a-ground-station>` (GCS) is your interface to the
+controller. Various versions of GCS software are available for Window's, Linux, and Android platforms.
 
 A GCS allows users to set-up, configure, test, and tune the vehicle. Advanced
 packages allow autonomous mission planning, operation,
@@ -138,8 +139,8 @@ Community is what really sets ArduPilot apart from many other offerings in the m
 Developer Community
 ===================
 
-`Developers Chat <https://gitter.im/ArduPilot/ardupilot>`__
-Working on the code?  Ask questions of the team in Gitter.
+`Developers Chat <https://ardupilot.org/discord>`__
+Working on the code?  Ask questions of the team in Discord.
 
 `Developers Guide <https://ardupilot.org/dev/index.html>`__
 All things for those who want to get into the nuts and bolts of ArduPilot development can be found in the Developer Guide.
@@ -215,23 +216,52 @@ Features
    :hidden:
 
    Home <https://ardupilot.org>
+
+.. toctree::
+   :hidden:
+   :caption: Platforms Using ArduPilot
+
+   Vehicle Types <docs/common-all-vehicle-types>
    Copter <https://ardupilot.org/copter/index.html>
    Plane <https://ardupilot.org/plane/index.html>
    Rover <https://ardupilot.org/rover/index.html>
    Sub <http://ardusub.com/>
+   Blimp <https://ardupilot.org/blimp/index.html>
    AntennaTracker <https://ardupilot.org/antennatracker/index.html>
+
+.. toctree::
+   :hidden:
+   :caption: Ground Control Stations
+
    Mission Planner <https://ardupilot.org/planner/index.html>
    APM Planner 2 <https://ardupilot.org/planner2/index.html>
    MAVProxy <https://ardupilot.org/mavproxy/index.html>
-   Companion Computers <https://ardupilot.org/dev/docs/companion-computers.html>
+
+.. toctree::
+   :hidden:
+   :caption: Information for Developers
+
    Developers <https://ardupilot.org/dev/index.html>
+   Companion Computers <https://ardupilot.org/dev/docs/companion-computers.html>
+
+.. toctree::
+   :hidden:
+   :caption: Get the firmware
+
    Firmware Downloads <docs/common-downloads_firmware>
+   Custom Firmware Build Server <https://custom.ardupilot.org>
+
+.. toctree::
+   :hidden:
+   :caption: Additional Information
+
    The ArduPilot Team <docs/common-team>
-   The History of ArduPilot<docs/common-history-of-ardupilot>
    ArduPilot Partners Program <docs/common-partners-program>
    Commercial Support <docs/common-commercial-support>
-   Acknowledgements <docs/common-acknowledgments>
    Hardware Vendors <docs/common-stores>
+   Acknowledgements <docs/common-acknowledgments>
    Contact Us <docs/common-contact-us>
    docs/common-appendix
-   Full Table of Contents <docs/common-table-of-contents>
+
+
+last build |today|

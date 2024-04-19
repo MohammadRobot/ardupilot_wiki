@@ -4,7 +4,7 @@
 Simple Overview of ArduPilot Operation
 ======================================
 
-This is a very basic overview of the functions of ArduPilot firmware running on a autopilot. Shown below is a simple block diagram of the basic functional operation. This will give you a better understanding of ArduPilot basic functions as you configure your system.
+This is a very basic overview of the functions of ArduPilot firmware running on an autopilot. Shown below is a simple block diagram of the basic functional operation. This will give you a better understanding of ArduPilot basic functions as you configure your system.
 
 .. image:: ../../../images/block-diagram.jpg
     :target: ../_images/block-diagram.jpg
@@ -21,7 +21,7 @@ Control inputs are input either by radio control receiver, or via MAVLink commun
 
 Outputs
 -------
-Outputs are provided to activate servos, motors, relays, etc. to control the vehicle. Any autopilot output can be assigned the desired vehicle control output function via the SERVOx_FUNCTION parameters.
+Outputs are provided to activate servos, motors, relays, etc. to control the vehicle. Any autopilot output can be assigned the desired vehicle control output function via the ``SERVOx_FUNCTION`` parameters. Note that outputs do NOT necessarily correspond to any RC input, unless their function is set to RCPassThru.
 
 Sensors
 -------

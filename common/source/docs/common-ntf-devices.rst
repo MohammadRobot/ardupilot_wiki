@@ -4,7 +4,7 @@
 Notification Device Configuration
 =================================
 
-ArduPilot provides the ability to notify users visually and/or aurally, of important status information and warnings. These can be provided on-board or externally via several types of devices: :ref:`single color LEDs, RGB LEDS, OLED displays<common-external-leds>` , and :ref:`Buzzers<common-buzzer>` .
+ArduPilot provides the ability to notify users visually and/or aurally, of important status information and warnings. These can be provided on-board or externally via several types of devices: :ref:`single color LEDs, RGB LEDS, OLED displays<common-external-leds>`, and :ref:`Buzzers<common-buzzer>`.
 
 
 LED and LED Display Configuration
@@ -29,7 +29,7 @@ In order to use any of these, they must be selected using the :ref:`NTF_LED_TYPE
 +-------+---------------------------------------+
 |  4	| Oreo LED (Solo specific)              |
 +-------+---------------------------------------+
-|  5	| UAVCAN                                |
+|  5	| DroneCAN                              |
 +-------+---------------------------------------+
 |  6	| NCP5623 External  I2C                 |
 +-------+---------------------------------------+
@@ -57,7 +57,7 @@ These are enabled via the :ref:`NTF_DISPLAY_TYPE<NTF_DISPLAY_TYPE>` parameter.
 BUZZER
 ======
 
-Buzzers can provide aural indications of status and warnings. Examples for a external piezo buzzer used with a Pixhawk are given :ref:`here <common-sounds-pixhawkpx4>` .
+Buzzers can provide aural indications of status and warnings. Examples for a external piezo buzzer used with a Pixhawk are given :ref:`here <common-sounds-pixhawkpx4>`.
 
 Several parameters are associated with buzzers for configuration and are detailed in the :ref:`common-buzzer` section.
 

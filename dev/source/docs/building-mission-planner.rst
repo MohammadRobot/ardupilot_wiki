@@ -4,22 +4,18 @@
 Building Mission Planner with Visual Studio
 ===========================================
 
-.. warning::
-
-    This page is outdated and instructions should be adapted to make it work.
-
 Introduction
 ============
 
 Mission Planner (MP) is an open source ground station developed in C#
-primarily for use on Windows/linux computers (although it can be run on Mac
-using mono).  This is the most commonly used ground station as it
+primarily for use on Windows/linux computers (although it can be run on Mac and Linux
+using mono). This is the most commonly used ground station as it
 provides the most complete functionality for vehicle setup as well as
 pre-flight mission planner, in-flight monitoring and post flight log
 file analysis.
 
 This page provides instructions on how you can build the Mission Planner
-software on your own machine using MS Visual Studio 2019 which may be
+software on your own machine using MS Visual Studio which may be
 useful if you wish to make changes for your own use or improvements for
 the community.  Building the mission planner may also help as a guide in
 case you plan to build your own custom ground station development.
@@ -36,7 +32,7 @@ Some warnings before you dive in:
    -  Experience with Microsoft Visual Studio (VS) development
       environment. MP is not the application to begin learning VS.
    -  Experience using Windows API  (Application programming Interface)
-      - including understanding of streams, processes, threads.
+   -  Including understanding of streams, processes, threads.
 
 -  Support for Visual Studio, programming in C# and Windows API may not
    be forthcoming from the DIY Drones community. You will need to get
@@ -47,141 +43,53 @@ System Requirements
 
 Here is what you will need.
 
--  Windows 10.  Sorry earlier versions no longer work.  Windows 7 etc will NOT work. 
--  Sufficient disk space, memory, processor power to comfortably run
-   Visual Studio (details below)
+-  Windows 10 or later (Windows 7 and older versions are not compatible).
+-  Sufficient disk space (arround 20GB for VS installation), memory, processor power to comfortably run
+   Visual Studio.
 -  An Internet connection.
--  Visual Studio 2019 community edition
+-  Visual Studio (**NOT VSCode**), at least version 2022. The Community Edition suffices.
 
 Install Visual Studio
-============================================
+=====================
 
-The first step is to get `Microsoft Visual Studio Community 2019 <https://visualstudio.microsoft.com/>`__\ installed and working in your
-Windows system.
+Begin by installing Microsoft Visual Studio and configuring it for your Windows system. Follow these steps:
 
--  Download and install MS Visual Studio 2019 Community Edition which
-   can be found `here <https://visualstudio.microsoft.com/>`__.
--  During the install Process, you will be prompted to install optional "workloads", at this stage, you must select: 
-    - ".NET desktop development" 
-    - "ASP.NET and web development" 
-    - "Universal Windows Platform developement" 
-    - "Mobile development with .NET" 
-    - ".NET Core cross-platofrm developement"
--  Reboot your PC
--  Start Visual Studio from the Start Menu
+- Download Visual Studio: Visit the `Microsoft Visual Studio download page <https://visualstudio.microsoft.com/downloads/>`__ and download the Community Edition by default.
+
+- Customize Installation: Visual Studio is a comprehensive suite with built-in Git support, but it can be overwhelming due to its complexity. To streamline the installation process, consider these steps:
+  - Access "More" in the Visual Studio installer.
+  - Choose "Import configuration."
+  - Import the provided configuration file: `vs2022.vsconfig <https://raw.githubusercontent.com/ArduPilot/MissionPlanner/master/vs2022.vsconfig>`__.
+
+By following these instructions, you will have the necessary components installed and ready for Mission Planner development.
+
+VSCode
+------
+
+While Visual Studio Code with the C# plugin can parse the code, please note that it **cannot build** Mission Planner at this time.
 
 
 After your VS installation is complete: 
 =======================================
 
--   Navigate to "Tools" Menu -> "Get Tools and Features" -> (wait for page load) -> Workloads -> Summary ( right of screen) -> then tick the tickbox labeled ".NET desktop development" "ASP.NET and web development" "Universal Windows Platform developement" "Mobile development with .NET" ".NET Core cross-platofrm developement" ( leaving other tickboxes as-is) -> then click "Modify" button at bottom.  wait for download/install to complete.
--  You might like to test your installation on a simple "Hello World" application, or the "SimpleExample" described below.
--  TIP: By default it is installed here: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\"  
+You should be able to use Git from the IDE. Clone `Mission Planner source code <https://github.com/ArduPilot/MissionPlanner.git>`__ to get the full code.
 
-Getting the Mission Planner source code from Github into your computer
-======================================================================
+Building the MissionPlanner
+===========================
 
-The Mission Planner source code is stored in GitHub.  In general you can
-follow the instructions :ref:`for the ardupilot flight code <where-to-get-the-code>` except that you should use the
-**https://github.com/ArduPilot/MissionPlanner** repository in place of the ardupilot repository.  
-You could clone the git repo to (for example) c:\\MissionPlanner\\  but the exact folder is not critical.
+To build the code, follow these steps:
 
-Open the Mission Planner solution in Visual Studio
-==================================================
+- Open `MissionPlanner.sln` file with Visual Studio
+- From the "Build" menu, select "Build MissionPlanner"
 
-.. image:: ../images/MPBuild_OpenSolution.png
-    :target: ../_images/MPBuild_OpenSolution.png
 
--  Start Visual Studio
--  Click File >> Open >> Project / Solution
--  Navigate to where the Mission Planner source was downloaded to and
-   open MissionPlanner.sln.
--  Visual Studio should open the "solution" which includes the Mission
-   Planner and a few other related applications (i.e. "3DR Radio",
-   "Updater", etc) which can all be see in the Solution Explorer
-   (highlighted in yellow above).
--  (If you haven't already installed the ".NET desktop development" add-in, you will be prompted to do it now.)
--  Set the "Solution Configuration" to "Debug" or "Release" (this can be
-   found just below the Tools menu)
+By default, Visual Studio will compile all projects and their dependencies as part of a build process.
 
--  Mission Planner is made up of several projects, you can see these by
-   expanding the "MissionPlanner" and "ExtLibs" folders of the Solution
-   Explorer.
+Non Windows building
+====================
 
-   -  MissionPlanner (the main code)
-   -  AviFile
-   -  BaseClasses
-   -  BSE.Windows.Forms
-   -  Core
-   -  GeoUtility
-   -  GMap.Net.Core
-   -  GMap.Net.WindowsForms
-   -  KMLib
-   -  MAVLink
-   -  MetaDataExtractor
-   -  MissionPlanner.Comms
-   -  MissionPlanner.Controls
-   -  MissionPlanner.Utils
-   -  px4uploader
-   -  SharpKml
-   -  ZedGraph
+Building Mission Planner on other systems isn't support currently.
 
-Building Mission Planner - Use the Batch Build Feature
-======================================================
-
-Before you attempt to build (compile) Mission Planner you must also have
-the official version installed on your PC.  This is because there are
-some .dll files that are not included in the Git repository.
-
-.. image:: ../images/MPBuild_BatchBuild.png
-    :target: ../_images/MPBuild_BatchBuild.png
-
--  Select Build >> Batch Build... and then press "Rebuild".  You will probably see errors
-   on your first attempt to compile (build) Mission Planner so try a
-   couple more times.
-
-If errors persist try some of the following:
-
--  For errors related to missing dlls:
-
-   -  In the Solution Explorer right click the MissionPlanner project,
-      Properties, Reference Paths
-   -  In the Folder entry, browse to and select the location of the
-      "installed" Mission Planner which is probably:
-      *C:\\Program Files (x86)\\Mission Planner* OR *C:\\Program
-      Files\\Mission Planner*
-   -  Click the Add Folder button to put the path to the installed MP
-      into the Reference paths box.
-   -  Click (select)  Build Events.  Remove all pre-build and post build
-      options.
-   -  Click (select)  Build.
-   -  If any of the sub-projects says "(incompatible)" next to it 
-      inside Solution Explorer, then right-click that sub-project 
-      and choose "reload", that should fix it. 
-
-For  errors about missing references, you will see the name of the
-project for each error listed. Select Properties for each project with
-such errors and add the location of the Installed Mission Planner like
-you did above for MissionPlanner project.  That should reduce the
-errors.
-
-If you see an error in project BSE.Windows.Forms "..could not locate the
-Code Analysis tool at ''.  You can eliminate this by un-checking the
-Enable Code Analysis box in Code Analysis  in the BSE.Windows.Forms
-properties.
-
-Some optional help in resolving build errors:
-
--  In VS, Select menu items [BUILD] [Configuration Manager] This will
-   show you which projects are compiled (built) each time you do a build
-   or re-build solution.
--  Check 'Build' for any that are not checked:
-
-   (I.E. 3DRRadio, Updater, wix)
--  Do [Build], [Clean Solution] then [Build], [Rebuild solution].
--  All projects should build without errors.
-
--  When you build without errors, you are ready to begin browsing or editing.
 
 Building the SimpleExample
 ==========================
@@ -208,8 +116,13 @@ When the "Form1" pops up, select the COM port, the baud rate (probably
 115200) and press Connect.  If it successfully connects, press Arm/Disarm
 to attempt to arm the vehicle.
 
-Note: there is no error checking in the application so if it fails to
-connect it
+.. note:: there is no error checking in the application if it fails to connect it
+
+
+.. warning::
+
+    Following instructions are deprecated and were only kept for example. There are probably not working and need update.
+
 
 Editing and Debugging Mission Planner (and Other Tips)
 ======================================================
@@ -219,7 +132,7 @@ Debugging may result in some warnings. You should learn what they mean
 and take the necessary steps to resolve them if that is the case. Here
 is a simple debugging example to get you started.
 
--  Do not (yet) connect your AutoPilot Hardware ( Pixhawk, etc ) to the 
+-  Do not (yet) connect your AutoPilot Hardware ( CubeOrange, etc. ) to the
    compiled version of MP.  You must  first copy some .xml files to 
    the bin/debug folder. See details below.
 -  First be sure VS is configured for debug (versus release) Set this in
@@ -227,7 +140,7 @@ is a simple debugging example to get you started.
 -  Select menu DEBUG, Start Debugging.   (Or, press F5).  Mission
    Planner should run as you normally see it.  However, some important
    configuration files are missing so connection to the AutoPilot Hardware 
-   ( eg Pixhawk, etc ) is not recommended at this time.
+   ( eg CubeOrange, etc ) is not recommended at this time.
 
    -  If after "Start Debugging" the program loading hangs in the splash
       screen and you see this message:  "Managed Debugging Assistant
@@ -279,7 +192,7 @@ will get you started.
    risk.**
 -  These steps assume VS is in the debug configuration.  [editors]
     Details when in Release mode could be added [/editors]
--  In order for your VS version of MP to function with the APM
+-  In order for your VS version of MP to function with ArduPilot
    connected, you will need to copy several files from the folder where
    MP is installed (C:\\Program Files (x86)\\APM Planner  or C:\\Program
    Files\\APM Planner) to the folder where your VS project compiled
@@ -316,16 +229,16 @@ will get you started.
       or bin/Release sub folders.
 
 -  At this point your local version of MP should be working. You should
-   be able to connect to your APM, Flight Data including status should
-   work, Configuration should bring up you APM parameters, Terminal
-   should work including saveing and browsing logs. Flight Planner
+   be able to connect to your ArduPilot FCU, Flight Data including status should
+   work, Configuration should bring up you ArduPilot parameters, Terminal
+   should work including saving and browsing logs. Flight Planner
    should also work. As mentioned before, use your modified version at
    your own risk.
 
 Submitting your changes for inclusion in Master
 ===============================================
 
-Generally the advice is the same as for the ardupilot flight code
+Generally the advice is the same as for the ArduPilot flight code
 (:ref:`instructions here <submitting-patches-back-to-master>`) but
 here is a very short summary of the steps:
 

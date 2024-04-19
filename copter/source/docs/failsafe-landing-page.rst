@@ -17,8 +17,10 @@ The main failsafe topics are listed below.
     Battery Failsafe <failsafe-battery>
     GCS Failsafe <gcs-failsafe>
     EKF Failsafe <ekf-inav-failsafe>
+    Dead Reckoning Failsafe <deadreckoning-failsafe>
     Vibration Failsafe <vibration-failsafe>
+    Dead Motor Takeoff Prevention <tkoff-rpm-min>
     Terrain Data Loss Failsafe (see section on loss of terrain data induced RTL) <terrain-following>
     Crash Check <crash_check>
-    Parachute <parachute>
+    Parachute <common-parachute>
     Independent Watchdog <common-watchdog>

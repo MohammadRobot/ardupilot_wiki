@@ -72,13 +72,23 @@ the accelerometer readings like this:
    square root (for x, y and z).  These final three values are what
    appear in the VIBE msg's VibeX, Y and Z fields.
 
+When looking at vibrations in a log the first thing to look at is the clipping. If the clipping is 0 that’s good. That means the vibrations that are being detected aren’t overwhelming the IMU.
+
+When troubleshooting the vibration, consider the axis of the vibration as a staring point to find the problem:
+
+    If X AND Y are both high, then you may have an issue with a motor bearing or prop balance. Or you may need more/better overall vibration damping for your FC.
+    If X OR Y is high then you may have an issue with your FC mounting. Maybe a wire is bouncing on the FC or restraining it. Or maybe your vibration damping works better in one axis than the other.
+    If you have a Z vibration then you may have a track issue with propeller (bent blade) or vertical play in a motor.
+
+Also consider that some flight conditions/airframes will have different natural vibrations. If the vibrations look good in a hover, but they increase with speed, perhaps there is an aerodynamic issue with the airframe, or in wind,
+
 Looking for "The Leans"
 -----------------------
 
 **The Leans** occurs when the vehicle's attitude estimate becomes incorrect causing it to lean significantly even though the pilot is commanding level flight.  The cause of the problem is often accelerometer aliasing which can be confirmed by comparing the Roll and Pitch attitude estimates from each of the estimation systems (i.e. each AHRSs or EKFs).  The attitude estimates should be within a few degrees of each other
 
 - Download the dataflash log and open in the ground station's log viewer
-- Compare the AHRS2.Roll, NKF1[0].Roll and NKF1[1].Roll
+- Compare the AHRS2.Roll, NKF1[0].Roll and NKF1[1].Roll if using EKF2, or AHRS2.Roll, XKF1[0].Roll and XKF1[1].Roll, if using EKF3
 
 The image below shows a typical log in which the attitudes match well
 
@@ -89,7 +99,7 @@ The image below shows a typical log in which the attitudes match well
 Advanced Analysis with FFT
 --------------------------
 
-Refer to the :ref:`Measuring Vibration with IMU Batch Sampler <common-imu-batchsampling>` page for instructions on how to collect large amounts of IMU data and perform an FFT analysis to determine the frequencies with the most vibration.
+Refer to the :ref:`Measuring Vibration with "Raw IMU Logging" <common-raw-imu-logging>` page for instructions on how to collect large amounts of IMU data and perform an FFT analysis to determine the frequencies with the most vibration.
 
 IMU Dataflash Log message
 -------------------------

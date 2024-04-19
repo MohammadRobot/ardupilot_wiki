@@ -1,10 +1,10 @@
-.. _common-cuav-neo-v2-pro-overview:
+.. _common-cuav-neo-v2-pro:
 
 ==============
 NEO V2 Pro GPS
 ==============
 
-NEO V2 pro is UAVCAN standard GPS developed by CUAV. It integrates industrial-grade compass, barometer, flight controller status light, buzzer, and safety switch all in one package. It has the characteristics of high safety and strong interference resistance.
+NEO V2 pro is DroneCAN standard GPS developed by CUAV. It integrates industrial-grade compass, barometer, autopilot status light, buzzer, and safety switch all in one package. It has the characteristics of high safety and strong interference resistance.
 
 .. image:: ../../../images/cuav-neo-v2-pro/neo-v2-pro.png
 	:target: ../_images/neo-v2-pro.png
@@ -90,10 +90,10 @@ Connect to CUAV v5+
 
 .. note::
 
-    The connection to other flight controllers is similar.
+    The connection to other autopilots is similar.
 
-Enable CAN port, UAVCAN, and Configure for NEO-V2 Pro
-=====================================================
+Enable CAN port, DroneCAN, and Configure for NEO-V2 Pro
+=======================================================
 
 See :ref:`common-canbus-setup-advanced` and :ref:`common-uavcan-setup-advanced` for more information.
 
@@ -104,7 +104,7 @@ Set the following parameters in all parameter tables of Mission planner and rest
 - :ref:`CAN_D1_PROTOCOL<CAN_D1_PROTOCOL>` set to 1.
 - :ref:`CAN_D2_PROTOCOL<CAN_D2_PROTOCOL>` set to 1.
 - :ref:`NTF_LED_TYPES<NTF_LED_TYPES>`     set to 231.
-- :ref:`GPS_TYPE<GPS_TYPE>`               set to 9.
+- :ref:`GPS1_TYPE<GPS1_TYPE>`               set to 9.
 
 .. image:: ../../../images/cuav-neo-v2-pro/fc-set.png
 	:target: ../_images/fc-set.png
@@ -120,8 +120,8 @@ If you need to set up NEO V2 PRO or upgrade its firmware, you need to enable SLC
 
     ArduPilot 4.0 or later firmware supports SLCAN.
 
-- Please connect NEO V2 pro to the flight controller's CAN1 interface.
-- Open mission planner and connect flight controller.
+- Please connect NEO V2 pro to the autopilot's CAN1 interface.
+- Open mission planner and connect autopilot.
 
 Modify the following parameters in the Full Parameter tab of Mission Planner.
 
@@ -129,36 +129,36 @@ Modify the following parameters in the Full Parameter tab of Mission Planner.
 
 - :ref:`CAN_SLCAN_CPORT<CAN_SLCAN_CPORT>` set to 1
 - :ref:`SERIAL7_PROTOCOL<SERIAL7_PROTOCOL>`  set to 22
-- Reboot flight controller
+- Reboot autopilot
 
 .. note::
 
-   CUAVV5 / NANO / FMUV5 flight controller running ArduPilot4.0 or later firmware will have two USB interfaces, one is flight controller's console port (SERIAL0) running MAVLINK  and one is an SLCAN interface port; if there are not two ports showing in the Mission Planner Comm Port drop-down box, please uninstall the driver and reinstall. If you continue to have problems, see :ref:`troubleshooting-composite-connections` 
+   CUAVV5 / NANO / FMUV5 autopilot running ArduPilot4.0 or later firmware will have two USB interfaces, one is autopilot's console port (SERIAL0) running MAVLINK  and one is an SLCAN interface port; if there are not two ports showing in the Mission Planner Comm Port drop-down box, please uninstall the driver and reinstall. If you continue to have problems, see :ref:`troubleshooting-composite-connections` 
    
 **For Pixhawk series / FMUv2 / FMU V3 / FMU V4**
 
 - :ref:`CAN_SLCAN_CPORT<CAN_SLCAN_CPORT>` Set to 1
 - :ref:`CAN_SLCAN_TIMOUT<CAN_SLCAN_TIMOUT>` Set to 0 (no timeout, reboot to return to normal operation)
 - :ref:`CAN_SLCAN_SERNUM<CAN_SLCAN_SERNUM>` Set to 0
-- Please do not reboot the flight controller until your operation is complete.
+- Please do not reboot the autopilot until your operation is complete.
 
 .. note::
 
-    STM32F4 does not support dual virtual USB ports, so  flight controllers using STM32F4 processor can only be used for SLCAN after the MAVLink connection on USB is closed; after writing the above settings, the USB interface becomes an SCLAN port; MAVLink connections can be made again after a reboot. Until then the USB connection can be used for SLCAN operations.
+    STM32F4 does not support dual virtual USB ports, so  autopilots using STM32F4 processor can only be used for SLCAN after the MAVLink connection on USB is closed; after writing the above settings, the USB interface becomes an SCLAN port; MAVLink connections can be made again after a reboot. Until then the USB connection can be used for SLCAN operations.
 
 NEO-V2 Internal Configuration
 =============================
 
-ArduPilot supports setting UAVCAN device internal settings through SLCAN, such as modifying node ID; enabling / disabling barometer, etc.
+ArduPilot supports setting DroneCAN device internal settings through SLCAN, such as modifying node ID; enabling / disabling barometer, etc.
 
 .. image:: ../../../images/cuav-neo-v2-pro/upgrade-firmware/slcan3.png
 	:target: ../_images/slcan3.png
 	
 #. Select the COMM port corresponding to SLCAN.
-#. Select the UAVCAN section under Initial Setup>Optional Hardware tab.
+#. Select the DroneCAN section under Initial Setup>Optional Hardware tab.
 #. Click "SLCAN NODE CAN1"  and
 #. Click "Inspector"
-#. Change configuration parameters for UAVCAN device
+#. Change configuration parameters for DroneCAN device
 
 **Enable barometer**
 
@@ -179,7 +179,7 @@ Firmware upgrade using Mission planner
 	:target: ../_images/slcan.png
 
 #. Select the COMM port corresponding to SLCAN.
-#. Click "SLCAN NODE CAN1" on the UAVCAN section under Initial Setup>Optional Hardware tab.
+#. Click "SLCAN NODE CAN1" on the DroneCAN section under Initial Setup>Optional Hardware tab.
 #. Click "Update"
 #. Select "NO" in the pop-up prompt box (Tes is to select online firmware; No selects local firmware).
 #. Select firmware file.
@@ -191,9 +191,9 @@ Firmware upgrade using Mission planner
 
 **Method Two：**
 
-Upgrade with UAVCAN GUI TOOL software
+Upgrade with DroneCAN GUI TOOL software
 
-`UAVCAN GUI TOOL download <https://github.com/UAVCAN/gui_tool/releases>`__.
+`DroneCAN GUI TOOL <https://github.com/DroneCAN/gui_tool>`__.
 
 - Select the device port corresponding to SLCAN and click "ok"
 
@@ -224,3 +224,4 @@ More information
 ================
 
 `CUAV docs <http://doc.cuav.net/gps/neo-v2-pro/en/>`__.
+

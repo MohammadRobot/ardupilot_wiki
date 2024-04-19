@@ -191,7 +191,7 @@ Check the following:
 #. Check your cables! The signal wire should be at the top, and ground
    at the bottom.
 #. Finally, if all else fails, try to narrow down the problem. First,
-   check that the the receiver is working right by plugging a servo into
+   check that the receiver is working right by plugging a servo into
    the output you're testing and making sure that it's outputting a good
    signal. Then plug one known-good RC channel into the APM input
    channels, from 1-7, one at a time and see if any are read. If some
@@ -324,11 +324,6 @@ between your battery and the motor and test the difference between a
 good motor and the bad one. If you are seeing higher draw in the bad
 one, replace or fix it.
 
-If you are using a Futaba tx/rx with more than 8 channels and purchased
-your APM before early 2013 you should upgrade your PPM encoder following
-the
-instructions \ :ref:`here <common-ppm-encoder-apm2x-atmega32u2>`.
-Below is a video pre-upgrade (i.e. twitches) and post (no twitches).
 
 Another possible cause is the THR_MIN parameter's default of 130 is too
 low for your motors or ESCs. The THR_MIN parameter controls the minimum

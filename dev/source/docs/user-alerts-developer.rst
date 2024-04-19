@@ -30,6 +30,11 @@ The User Alerts system consists of 3 parts:
 - The ability of applications (GCS software, websites) to ingest and use the User Alert data.
 
 
+.. note::
+
+   All User Alerts reported from 16/09/2020 (or later) are in the User Alert database. There is no guarantee
+   that the database holds all User Alerts reported before this date.
+   
 Processes
 =========
 
@@ -93,7 +98,7 @@ The json files themselves will each have the below fields. There are examples in
      - Date that this User Alert was raised.
 
    * - affectedFirmware
-     - String array containing ``["all"]`` OR individual firmwares. For example: ``["copter", "sub", "tracker", "AP_Periph"]``
+     - String array containing ``["all"]`` OR individual firmwares: ``["copter", "sub", "antenna", "plane", "rover", "AP_Periph"]``
      - Which ArduPilot firmware is affected. Use comma separated value to specify multiple vehicles if "all" does not work.
 
    * - hardwareLimited
@@ -104,6 +109,11 @@ The json files themselves will each have the below fields. There are examples in
      - ``string``
      - Textual description of the User Alert. Should be understandable by an average user.
 
+   * - criticality
+     - ``int`` of value 1,2,3 or 4.
+     - An assessment of the likelihood of the issue occurring. 1 = CRITICAL - Likely to be encountered by all vehicle configurations. 2 = CRITICAL - Likely to be encountered by specific vehicle configurations, 3 = MAJOR - possible to be encountered. 4 = MINOR - unlikely to be encountered.
+
+     
    * - mitigation
      - ``string``
      - Textual description of any mitigations that a user can take to prevent the issue from occurring BEFORE a patched ArduPilot is released. Should be understandable by an average user.
@@ -118,24 +128,27 @@ The json files themselves will each have the below fields. There are examples in
 
    * - linkedIssue
      - ``string``
-     - URL to Issue in ArduPilot GitHub repo. Optional
+     - URL to Issue in ArduPilot GitHub repository. Optional.
 
    * - linkedInfo
      - String array of URLs
-     - URLs to any supporting information about the issue, such as forum posts. Optional
+     - URLs to any supporting information about the issue, such as forum posts. Optional.
 
    * - linkedPR
      - ``string``
      - URL to the fix PR in ArduPilot GitHub repo. Blank if there is not PR yet.
 
    * - versionFrom
-     - Dict of firmware=version. For example: ``{"copter": "4.0.1", "plane": "4.0.5"}``
+     - Dict of firmware versions. For example: ``{"copter": "4.0.1", "plane": "4.0.5"}``
      - ArduPilot release which introduced the issue, if known.  Empty assumes all previous versions. The dict must cover all firmwares listed in "Affected firmware".
 
    * - versionFixed
-     - Dict of firmware=version. FOr example: ``{"copter": "4.0.1", "plane": "4.0.5"}``
-     - ArduPilot release which contains fix. List must cover all firmwares listed in "Affected firmware". It is assumed that all versions between VersionFrom and this are affected by the User Alert. This field is an empty dict if there is no fixed version yet
+     - Dict of firmware=version. For example: ``{"copter": "4.0.1", "plane": "4.0.5"}``
+     - ArduPilot release which contains fix. List must cover all firmwares listed in "Affected firmware". It is assumed that all versions between VersionFrom and this are affected by the User Alert. This field is an empty if there is no fixed version yet.
 
+   * - lastmodified
+     - ``string``
+     - Date and time that this User Alert was modified, in ISO8601 format. This field is automatically added by the CI and does not need to be manually added.
 
 Application Ingestion
 =====================
@@ -144,6 +157,7 @@ To make application ingestion easier, there will be a generated manifest file li
 
 There are URL's for both an example manifest (for testing purposes) and the actual user alerts manifest:
 
-- URL for example User Alerts: https://firmware.ardupilot.org/userAlerts/exampleManifest.json
-- URL for User Alerts: https://firmware.ardupilot.org/userAlerts/manifest.json
+- URL for example User Alerts: https://firmware.ardupilot.org/useralerts/examplemanifest.json
+- URL for User Alerts: https://firmware.ardupilot.org/useralerts/manifest.json
 
+There is also a timestamp of the last date and time that the manifests were uploaded in https://firmware.ardupilot.org/useralerts/lastmodified.txt, in ISO8601 format.

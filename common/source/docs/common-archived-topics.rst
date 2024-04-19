@@ -27,12 +27,20 @@ value to users with old hardware.
     AttoPilot Current/Voltage Sensor <common-using-a-current-sensor>
     Erle-Brain2 Wiring Quick Start <common-erle-brain2-wiring-quick-start>
     PXFmini Wiring Quick Start <common-pxfmini-wiring-quick-start>
+    Web Apps <common-web-apps>
 
 [/site]
 [site wiki="copter,plane,rover"]
     Edge Quick Start <common-edge-quick-start>
+    Skysight Mono Camera Trigger <common-camera-trigger-skysight-mono>
+    PPM Encoders <common-ppm-encoder-8-channel-standalone-encoder>
+    PPM Encoder <common-ppm-encoder>
+    common-toshiba-can-escs
+    common-tarot-gimbal
+    DROTAG x Geotagger <common-geotagging-drotagx>
 [/site]
 [site wiki="copter"]
+    Boat Mode <boat-mode>
     Using Xbee radios for telemetry with APM <xbee-radios>
     Quick Start for RTFs <quick-start-guide>
     HIL Quad Simulator <hil-quad>
@@ -51,12 +59,18 @@ value to users with old hardware.
     Landing Gear <landing-gear>
     ADNS3080 Mouse Sensor (no longer supported) <common-mouse-based-optical-flow-sensor-adns3080>
     Analog Sonar (AC3.1) <sonar>
-    [/site]
+    Tricopter Setup <archived-tricopter>
+    Position mode <ac2_positionmode>
+    Advanced Tuning <tuning>
+    Basic Tuning <basic-tuning>
+    Auxiliary Function Switches (3.6 and earlier) <channel-7-and-8-options>
+[/site]
 [site wiki="rover"]
     Pre-4.0 Rover Avoidance <rover-object-avoidance>
     Sonar Sensors <sonar-sensors>
     Tuning Steering and Navigation (ver 3.1 and older) <tuning-steering-and-navigation-for-a-rover>
     Tuning Waypoint Turn Speed (ver 3.1 and older) <speed-turn-parameter-tuning>
+    ADNS3080 Mouse Sensor (no longer supported) <common-mouse-based-optical-flow-sensor-adns3080>
 [/site]
 
 [site wiki="plane"]
@@ -65,6 +79,8 @@ value to users with old hardware.
     Normal/Elevon/VTail Mode & Reversing Servos <reversing-servos-and-setting-normalelevon-mode>
     Channel Output Functions <channel-output-functions>
     ADNS3080 Mouse Sensor (no longer supported) <common-mouse-based-optical-flow-sensor-adns3080>
+    LAND mode <land-mode>
+    Geofencing prior to 4.1 <geofencing>
 [/site]
 [site wiki="dev"]
 .. toctree::
@@ -79,6 +95,7 @@ value to users with old hardware.
     Building for Pixhawk on Windows with Make <building-px4-with-make>
     Building ArduPilot with Arduino for Windows <building-ardupilot-with-arduino-windows>
     Editing & Building with Atmel Studio or Visual Studio <building-ardupilot-apm-with-visual-studio-visual-micro>
+    Editing with Eclipse <editing-the-code-with-eclipse>
     Building for APM2.x with Make (Win, Mac, Linux) <building_with_make>
     APM2.x on MacOS with Arduino <building-the-code-on-mac>
     APM2.x on Linux with Make <building-the-code-onlinux>
@@ -88,13 +105,23 @@ value to users with old hardware.
     Building for Erle-Brain 2 <building-for-erle-brain-2>
     Building for Erle-Brain <building-for-erle-brain>
     Building for Navio on RPI 2<building-for-navio-on-rpi2>
+    Setup the waf Build Environment on Windows10 using WSL <building-setup-windows10>
     Intel Edison <intel-edison>
     Interfacing with Pixhawk Using the NSH <interfacing-with-pixhawk-using-the-nsh>
     BeaglePilot Project <beaglepilot>
     Making a MAVLink WiFi bridge using the Raspberry Pi <making-a-mavlink-wifi-bridge-using-the-raspberry-pi>
     HITL Simulators <hitl-simulators>
     Weekly meetings on Mumble Server <ardupilot-mumble-server>
+    How to sign a Pixhawk with your Certificate of Authenticity <how-to-use-the-auth-command-to-sign-a-pixhawk-board-with-your-certificate-of-authenticity>
+    SITL Serial Mapping <sitl-serial-mapping>
+    2020/2021 Roadmap <roadmap>
+    Trouble Shooting Pixhawk4 Boot <troubleshooting-pixhawkpx4-boot>
+[/site]
+[site wiki="copter,rover"]
+.. toctree::
+    :maxdepth: 1
 
+    Visual Odometry with OpenKai and ZED <common-zed>
 [/site]
 
 

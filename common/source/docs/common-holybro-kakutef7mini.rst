@@ -11,7 +11,7 @@ Holybro Kakute F7 Mini
 
 .. note::
 
-   Support for this board is available with ArduPilot-4.0 (and higher). Only the V1 adn V2 boards are supported. The V3 board changed microporcessor type and is no longer capable of running ArduPilot.
+   Support for this board is available with ArduPilot-4.0 (and higher). Only the V1 and V2 boards are supported. The V3 board changed microporcessor type and is no longer capable of running ArduPilot.
 
 .. note::
 
@@ -64,14 +64,25 @@ The UARTs are marked Rn and Tn in the above pinouts. The Rn pin is the receive p
 - SERIAL2 -> UART2 (Telem2)
 - SERIAL3 -> UART3 (GPS)
 - SERIAL4 -> UART4
-- SERIAL6 -> UART6 (TX only unless :ref:`BRD_ALT_CONFIG<BRD_ALT_CONFIG>` = 1, then RX available also)
+- SERIAL6 -> UART6 (RC input)
 - SERIAL7 -> UART7 (Receive only, ESC Telemetry)
 
 RC Input
 ========
  
-RC input is configured on the R6 (UART6_RX) pin. It supports all RC protocols, however for Fport  :ref:`BRD_ALT_CONFIG<BRD_ALT_CONFIG>` should be set to 1 and configured as described in :ref:`FPort<common-FPort-receivers>` section.
+RC input is configured on the R6 (UART6_RX) pin. It supports all RC protocols except PPM. See :ref:`common-rc-systems` for details for a specific RC system. :ref:`SERIAL6_PROTOCOL<SERIAL6_PROTOCOL>` is set to "23", by default, to enable this.
+
+- SBUS/DSM/SRXL connects to the R6 pin but SBUS requires that the :ref:`SERIAL6_OPTIONS<SERIAL6_OPTIONS>` be set to "3".
+
+- FPort requires connection to T6 and :ref:`SERIAL6_OPTIONS<SERIAL6_OPTIONS>` be set to "7".
+
+- CRSF also requires a T6 connection, in addition to R6, and automatically provides telemetry. Set :ref:`SERIAL6_OPTIONS<SERIAL6_OPTIONS>` to "0".
+
+- SRXL2 requires a connection to T6 and automatically provides telemetry.  Set :ref:`SERIAL6_OPTIONS<SERIAL6_OPTIONS>` to "4".
+
+Any UART can be used for RC system connections in ArduPilot also, and is compatible with all protocols except PPM. See :ref:`common-rc-systems` for details.
  
+
 FrSky Telemetry
 ===============
 
@@ -92,30 +103,32 @@ The KakuteF7 Mini supports OSD using :ref:`OSD_TYPE<OSD_TYPE>` 1 (MAX7456 driver
 PWM Output
 ==========
 
-TThe KakuteF7 Mini supports up to 6 PWM outputs. M1 to M4 are accessed via the connector. M5 and M6 are the pads shown on the above diagram. All 6 outputs support DShot as well as all PWM types.
+TThe KakuteF7 Mini supports up to 6 outputs. M1 to M4 are accessed via the connector and are :ref:`bi-directional<bidir-dshot>` capable. M5 and M6 are the pads shown on the above diagram. M1-4 and M6 outputs support DShot as well as all PWM types.M5 only supports PWM.
 
 The PWM is in 3 groups:
 
-- PWM 1, 2 and 3 in group1
-- PWM 4 and 5 in group2
-- PWM 6 in group3
+- PWM 1, 4 in group1
+- PWM 2 and 3 in group2
+- PWM 5 in group3
+- PWM 6 in group4
 
 Channels within the same group need to use the same output rate. If any channel in a group uses DShot then all channels in the group need to use DShot.
 
 Battery Monitoring
 ==================
 
-The board has a built-in voltage and current sensor. The voltage
-sensor can handle up to 6S LiPo batteries.
+The board has a built-in voltage sensor. The voltage
+sensor can handle up to 6S LiPo batteries. An external current
+sensor can be attached to pin 4 on the ESC connector.
 
 The correct battery setting parameters are:
 
- - :ref:`BATT_MONITOR<BATT_MONITOR>` 4
+ - :ref:`BATT_MONITOR<BATT_MONITOR>` 4, if external sensor used; 3 for voltage only
  - :ref:`BATT_VOLT_PIN<BATT_VOLT_PIN>` 13
- - :ref:`BATT_CURR_PIN<BATT_CURR_PIN>` 12
- - :ref:`BATT_VOLT_MULT<BATT_VOLT_MULT>` 10.1
- - :ref:`BATT_AMP_PERVLT<BATT_AMP_PERVLT>` 17.0
-
+ - :ref:`BATT_CURR_PIN<BATT_CURR_PIN>` 12 , if external sensor used.
+ - :ref:`BATT_VOLT_MULT<BATT_VOLT_MULT>` 10.9
+ - :ref:`BATT_AMP_PERVLT<BATT_AMP_PERVLT>` should be set to match external current sensor, if used.
+ 
 Compass
 =======
 
@@ -136,3 +149,10 @@ firmware, using your favourite DFU loading tool.
 Once the initial firmware is loaded you can update the firmware using
 any ArduPilot ground station software. Updates should be done with the xxxxxxxxxx.apj firmware files.
 
+Firmware
+========
+
+Firmware for this board can be found `here <https://firmware.ardupilot.org>`_ in  sub-folders labeled
+"KakuteF7Mini".
+
+[copywiki destination="plane,copter,rover,blimp"]

@@ -2,149 +2,126 @@
 
 [copywiki destination="copter,plane"]
 
-============================================================================
-Managing Gyro Noise with the Static Notch and Dynamic Harmonic Notch Filters
-============================================================================
+===========================================================
+Managing Gyro Noise with the Dynamic Harmonic Notch Filters
+===========================================================
 
-As :ref:`discussed<common-vibration-damping>`, managing vibration in ArduPilot autopilot installations is extremely important in order to yield predictable control of an aircraft. Typically installations utilise mechanical vibration damping in order to remove the worst of the vibration. However, mechanical damping can only go so far and software filtering must be used to remove further noise. To the autopilot, vibration noise looks like any other disturbance (e.g. wind) that the autopilot must compensate for in order to control the aircraft. ArduPilot uses a :ref:`low-pass <INS_GYRO_FILTER>` software filter to remove much of this remaining vibration noise, however, filtering has an unwanted side-effect - it removes *everything* including attitudinal and control information about the aircraft. Thus, while aggressive filtering can eliminate noise it can also reduce the control and responsiveness of the aircraft. This problem gets particularly acute on helicopters with very high levels of vibration noise at harmonics of the rotor speed and small, high powered Copters with low-levels of natural mechanical damping that require greater control.
+As discussed under the :ref:`Vibration Damping<common-vibration-damping>` topic, managing vibration in ArduPilot autopilot installations is extremely important in order to yield predictable control of an aircraft. Typically installations utilize mechanical vibration damping for the autopilot, internally or externally, in order to remove the worst of the vibration. However, mechanical damping can only go so far and software filtering must be used to remove further noise.
 
-For multicopters, virtually all vibrations originate from the motors and, importantly, quite a lot is known about this noise source as the majority of it is linked to the motor rotational frequency.  For helicopters, the vibrations are linked to the rotor speed.  It is thus theoretically possible to construct a software filter that targets *just* this noise, leaving all of the useful gyro information alone. This is what a *notch filter* does - it targets a narrow band of frequencies.
+To the autopilot, vibration noise looks like any other disturbance (e.g. wind, turbulence, control link slop, etc.) that the autopilot must compensate for in order to control the aircraft. This prevents optimum tuning of the attitude control loops and decreased performance.
 
-ArduPilot has support for two different notch filters - a :ref:`static notch filter<common-imu-notch-filtering-static-notch>` that can be set at a fixed frequency and a dynamic notch filter that can be targeted at a range linked to the motor rotational frequency for multicopter motors or the rotor speed for helicopters.
+ArduPilot provides two filtering mechanisms for noise. Lowpass filters on the accelerometer signals, controlled by the :ref:`INS_ACCEL_FILTER<INS_ACCEL_FILTER>`, and  the gyro signals, controlled by :ref:`INS_GYRO_FILTER<INS_GYRO_FILTER>`, and Harmonic Notch Filters on the gyro signals.
 
-With the introduction of dynamic notch filtering, the need for static notch filtering is reduced, although it can be useful in targeting particular resonant frequencies (e.g. of the frame). We will therefore look at dynamic filtering first.
+As discussed in :ref:`common-measuring-vibration` section, there are basically two classes of noise/vibrations: those generated within the bandwidth of the gyros/accelerometer sampling and noise above those frequencies which are "aliased" down to within that bandwidth and can cause the "leans". The aliased noise must be eliminated at the source with improved mounting or frame rigidity, but the above filters can deal with the other sources, typically generated from the motor/propellers at their rotation frequency and its harmonics.
 
------
-Setup
------
+For multicopters and QuadPlanes, virtually all vibrations originate from the motor's rotational frequency.  For helicopters and planes, the vibrations are linked to the main rotor/prop speed.
 
-Pre-Flight Setup
-================
+ArduPilot has support for two notch filters whose filter frequency can be linked to the motor rotational frequency for motors, or the rotor speed for helicopters, and provides notches at a primary frequency and its harmonics.
 
-ArduPilot allows you to select the mechanism used for controlling the harmonic notch frequency. By default this mechanism is :ref:`throttle-based<common-imu-notch-filtering-throttle-based-setup>` since that will work on all Copters/QuadPlanes. However, for Copters with an rpm sensor or :ref:`BLHeli ESC telemetry support<common-dshot-blheli32-telemetry>`, setup can be radically simpler:
+While the lowpass filters can effectively diminish the impact of this noise, having low frequency set points creates a lot of phase lag and therefore reduces how aggressive the tune can be before oscillation occurs, which results in a poorer tune.
 
-- Set :ref:`INS_HNTCH_MODE <INS_HNTCH_MODE>` = 2 to use the RPM sensor to set the harmonic notch frequency. This is primarily used in :ref:`Helicopters<common-imu-notch-filtering-helicopter-setup>`
-- Set :ref:`INS_HNTCH_MODE <INS_HNTCH_MODE>` = 3 to use BLHeli ESC telemetry support to set the harmonic notch frequency. This requires that your ESCs are configured correctly to support BLHeli telemetry via :ref:`a serial port<common-dshot-blheli32-telemetry>`
-- Set :ref:`INS_HNTCH_REF <INS_HNTCH_REF>` = 1 to set the harmonic notch reference value, which for ESC telemetry generally means no scaling
+For the gyro based rate controllers, this reduces their ability to respond to fast disturbances. If the gyro lowpass filter can be set higher, the phase lag induced is lower and the tune can be more aggressive. But this allows more noise and vibration, effectively canceling that gain out. Enabling either one or both of the Harmonic Notch filters allow targeting the noise generated by the motors, allowing a higher frequency of the following low pass to be set and therefore allowing tighter tune.
 
-.. _common-imu-notch-filtering-throttle-based-setup:
+.. _notch_setup_overview:
 
-Throttle-based Setup
-====================
+Notch Filter Setup Overview
+===========================
 
-If you do not have ESC telemetry then throttle-based setup is generally the way to go.
+#. Select how the notch center frequency will be controlled. See :ref:`center_freq_control`.
+#. If a static notch (not usually recommended), or :ref:`throttle-based<common-imu-notch-filtering-throttle-based-setup>` control is used, the dominant noise frequencies will need to be determined in order to setup the notch. See :ref:`notch_center_freq`.
+#. :ref:`Enable the notch filter<notch_enable>`.
+#. Setup the selected center frequency control method using :ref:`INS_HNTCH_MODE <INS_HNTCH_MODE>`. Then setup its associated parameters by reading its associated page linked in this secion :ref:`center_freq_control`.
+#. After a test flight and log analysis with the notch enabled (See :ref:`notch_check`), the :ref:`number and placement of higher harmonic filters implemented can be adjusted <notch_harmonics>`, the use of the :ref:`multi-notch options<notch_options>`, or even a second harmonic notch set (:ref:`INS_HNTC2_ENABLE<INS_HNTC2_ENABLE>`) can be configured to improve noise reduction effectiveness. The web based `Filter Review Tool <https://firmware.ardupilot.org/Tools/WebTools/FilterReview/>`__ can be used to experiment with parameter changes based on the test flight log to determine best configurations without having to make iterative test flights.
 
-- Set :ref:`INS_HNTCH_MODE <INS_HNTCH_MODE>` = 1 to use a throttle-based estimation to set the harmonic notch frequency.
+.. _notch_enable:
 
-In order to configure the throttle-based dynamic harmonic notch filter it is important to establish a baseline that identifies the motor noise at the hover throttle level. To do this we need to use the :ref:`batch sampler<common-imu-batchsampling>`
 
-- Set :ref:`INS_LOG_BAT_MASK <INS_LOG_BAT_MASK>` = 1 to collect data from the first IMU
-- :ref:`LOG_BITMASK <LOG_BITMASK>` 's IMU_RAW bit must **not** be checked.  The default value is fine
-- Set :ref:`INS_LOG_BAT_OPT <INS_LOG_BAT_OPT>` = 0 to capture pre-filter gyro data
+Enabling the Notch Filters
+==========================
 
-.. _common-imu-notch-filtering-flight-and-post-flight-analysis:
+The harmonic notch is enabled overall by setting :ref:`INS_HNTCH_ENABLE<INS_HNTCH_ENABLE>` = 1 for the first notch, and, if needed,  a second set of harmonic notches using :ref:`INS_HNTC2_ENABLE<INS_HNTC2_ENABLE>` = 1. After rebooting, all the relevant parameters will appear.
 
-Flight and Post-Flight Analysis
-===============================
+Various methods of dynamically adjusting the notch(s) center frequency to track motor speed under different thrust conditions is provided, ie Dynamic Harmonic Notch filtering.
 
-- Perform a hover flight of at least 30s in altitude hold and :ref:`download the dataflash logs <common-downloading-and-analyzing-data-logs-in-mission-planner>`
-- Open Mission Planner, press Ctrl-F, press the FFT button, press "new DF log" and select the .bin log file downloaded above
+.. _center_freq_control:
 
-.. image:: ../../../images/imu-batchsampling-fft-mp2.png
-    :target:  ../_images/imu-batchsampling-fft-mp2.png
-    :width: 450px
 
-On the graph it should be possible to identify a significant peak in noise that corresponds to the motor rotational frequency. On a smaller Copter this is likely to be around 200Hz and on a larger Copter/Quadplane 100Hz or so. Here is an example from a 5" quad:
+Notch Filter Control Types
+==========================
 
-.. image:: ../../../images/pre-tune-fft.png
-    :target:  ../_images/pre-tune-fft.png
-    :width: 450px
+Key to the dynamic notch filter operation is control of its center frequency. There are five methods that can be used for doing this:
 
-- With the same log, open it in the regular way in mission planner and graph the throttle value. From this identify an average hover throttle value.
-- It's also possible to use :ref:`MOT_HOVER_LEARN <MOT_HOVER_LEARN>` = 2 in Copter and read off the value of :ref:`MOT_THST_HOVER <MOT_THST_HOVER>` , or :ref:`Q_M_HOVER_LEARN <Q_M_HOVER_LEARN>` = 2 in QuadPlane and read off the value of :ref:`Q_M_THST_HOVER <Q_M_THST_HOVER>`
-- This gives you a hover motor frequency *hover_freq* and thrust value *hover_thrust*
+#. :ref:`INS_HNTCH_MODE <INS_HNTCH_MODE>` = 0. **Static center frequency**. Dynamic notch frequency control is disabled. The center frequency is fixed and is static. Often used in Traditional Helicopters with external governors for rotor speed, either incorporated in the ESC or separate for ICE motors.
+#. :ref:`INS_HNTCH_MODE <INS_HNTCH_MODE>` = 1. (Default) **Throttle position based**, where the frequency at hover throttle is determined by analysis of logs, and then variation of throttle position above this is used to track the increase in noise frequency. Note that the throttle reference only applies to VTOL motors in QuadPlanes, not forward motors, and will not be effective in fixed wing only flight modes. See :ref:`throttle-based<common-imu-notch-filtering-throttle-based-setup>` for further setup details.
+#. :ref:`INS_HNTCH_MODE <INS_HNTCH_MODE>` = 2 (RPM Sensor 1) or 5(RPM Sensor2). **RPM sensor based**, where an external :ref:`RPM sensor <common-rpm>` is used to determine the motor frequency and hence primary vibration source's frequency for the notch. Often used in Traditional Helicopters (See :ref:`Helicopters<common-imu-notch-filtering-helicopter-setup>`) using the ArduPilot Head Speed Governor feature. See :ref:`RPM Sensor<common-rpm-based-notch>` for further setup instructions.
+#. :ref:`INS_HNTCH_MODE <INS_HNTCH_MODE>` = 3. **ESC Telemetry based**, where the ESC provides motor RPM information which is used to set the center frequency. This can also be used for the forward motor in fixed wing flight, if the forward motor(s) ESCs report RPM. This requires that your ESCs are configured correctly to support BLHeli telemetry via :ref:`a serial port<blheli32-esc-telemetry>`. See :ref:`ESC Telemetry<common-esc-telem-based-notch>` for further setup instructions. If :ref:`INS_HNTCH_OPTS<INS_HNTCH_OPTS>`, or :ref:`INS_HNTC2_OPTS<INS_HNTC2_OPTS>` if the second set of notches is enabled, has bit 1 set, then a set of notches for each motor will be created, tracking its RPM telemetry, otherwise, the average frequency of all motors will set the center frequency.
+#. :ref:`INS_HNTCH_MODE <INS_HNTCH_MODE>` = 4. **In-Flight FFT based**, where a running FFT is done in flight to determine the primary noise frequency and adjust the notch's center frequency to match. This probably the best mode if the autopilot is capable of running this feature. It requires that the autopilot firmware supports it (see :ref:`common-limited_firmware` for GyroFFT feature) and has sufficient cpu power (F7/H7 autopilots). This mode also works on fixed wing only Planes. See :ref:`In-Flight FFT <common-imu-fft>` for further setup instructions.
 
-Harmonic Notch Configuration
+All of the above are repeated, independently, for the second notch and are prefaced with ``INS_HNTC2_`` instead of ``INS_HNTCH_``. The following will explain setup for the first set of notches.
+
+.. note:: only one filter can be mode 4(FFT).
+
+.. _notch_center_freq:
+
+
+Determining Notch Filter Center Frequency
+=========================================
+
+Before actually setting up a dynamic notch filter, the frequencies that are desired to be rejected must first be determined. This is crucial if a static notch or :ref:`common-throttle-based-notch` is used. While the other methods do not require this knowledge before setting up their parameters, it can still be worthwhile as a comparison point for the post filter activation analysis of the filter's effectiveness.
+
+Once the noise frequency is determined, the notch filter(s) can be further setup. Historically, :ref:`common-imu-batchsampling` has been used for this (also for slow cpu's like F4-based autopilots), logging short bursts of raw IMU data for spectral analysis.
+
+As of firmware version 4.5 and later, a better method has been developed using continuous raw IMU data, if the autopilot is H7-based, and using a new web based tool. :ref:`This method is now preferred <common-raw-imu-logging>`.
+
+.. _notch_harmonics:
+
+
+Number of Harmonics Filtered
 ============================
 
-- Set :ref:`INS_HNTCH_ENABLE <INS_HNTCH_ENABLE>` = 1 to enable the harmonic notch
-- Set :ref:`INS_HNTCH_REF <INS_HNTCH_REF>` = *hover_thrust* to set the harmonic notch reference value
-- Set :ref:`INS_HNTCH_FREQ <INS_HNTCH_FREQ>` = *hover_freq* to set the harmonic notch reference frequency
-- Set :ref:`INS_HNTCH_BW <INS_HNTCH_BW>` = *hover_freq* / 2 to set the harmonic notch bandwidth
+- Set :ref:`INS_HNTCH_HMNCS <INS_HNTCH_HMNCS>` to enable multiple harmonic filters centered at up to 16x the base frequency (multiples of the center frequency) notches. For ESC :ref:`INS_HNTCH_MODE <INS_HNTCH_MODE>` tracking, each motor will get a set of these notches. If an octocopter sets up three harmonics, this results in 8 x 3 = 24 notch filters. Enabling triple notches (see below) would result in 72 filters! This would most certainly cause excessive cpu loading and performance issues. Other modes only provide a single set of harmonic notches.
 
-.. _common-imu-notch-filtering-post-configuration-flight-and-post-flight-analysis:
+Always enable only the number of harmonic notch filters actually required and be especially aware of what is being enabled if using ESC (:ref:`INS_HNTCH_MODE <INS_HNTCH_MODE>` = 3) tracking mode. Enabling too many will result in running out of CPU cycles with unpredictable results. Three harmonics is usually safe.
 
-Post Configuration Flight and Post-Flight Analysis
-==================================================
+.. _notch_check:
 
-- This time set :ref:`INS_LOG_BAT_OPT <INS_LOG_BAT_OPT>` = 2 to capture post-filter gyro data
 
-Perform a similar hover flight and analyze the dataflash logs in the same way. This time you should see significantly less noise and, more significantly, attenuation of the motor noise peak. If the peak does not seem well attenuated then you can experiment with increasing the bandwidth and attenuation of the notch. However, the wider the notch the more delay it will introduce into the control of the aircraft so doing this can be counter-productive.
+Checking Notch Filter Effectiveness
+===================================
 
-Here is an example from the same 5" quad with the harmonic notch configured:
+Once the notch filter(s) are setup, the effectiveness of them can be checked by again measuring the  frequency spectrum of the output of the filters (which are the new inputs to the IMU sensors). Refer back to the :ref:`common-imu-batchsampling`  or :ref:`common-raw-imu-logging` page for this.
 
-.. image:: ../../../images/post-tune-fft.png
-    :target:  ../_images/post-tune-fft.png
-    :width: 450px
+.. _notch_options:
 
-Notch Frequency Scaling
-=======================
 
-The harmonic notch is designed to match the motor noise frequency as it changes by interpreting the throttle value. The frequency is scaled up from the hover frequency and will never go below this frequency. However, in dynamic flight it is quite common to hit quite low motor frequencies during propwash. In order to address this it is possible to change the ref value in order to scale from a lower frequency.
+Multi Notch
+===========
 
-- First perform a long dynamic flight using your current settings and post-filter batch logging. Examine the FFT and look at how far the motor noise peak extends below the hover frequency. Use this frequency - *min_freq* - as the lower bound of your scaling. Then in order to calculate an updated value of the throttle reference use:
+The software notch filters used are very "spikey" being relatively narrow but good at attenuation at their center. On larger copters the noise profile of the motors is quite dirty covering a broader range of frequencies than can be covered by a single notch filter. In order to address this situation it is possible to configure the harmonic notches as multiple notches that gives a wider spread of significant attenuation. The configuration is controlled by the :ref:`INS_HNTCH_OPTS <INS_HNTCH_OPTS>` parameter. This is a bitmask parameter and multiple options are possible at the same time, but using bit 0, 1, and bit 4 at the same time should be avoided. Use only one of those in a given configuration.
 
-:ref:`INS_HNTCH_REF <INS_HNTCH_REF>` = *hover_thrust* * SQUAREROOT(*min_freq / hover_freq*)
+==========================================      =======================
+:ref:`INS_HNTCH_OPTS <INS_HNTCH_OPTS>` Bit      Action
+==========================================      =======================
+0                                               Double overlapping Notches
+1                                               MultiSource: if using FFT Mode, the three largest noise sources will have a notch assigned. If ESC Telemetry Mode, then each motor will have a notch assigned at its RPM.
+2                                               Updates the filters at the loop rate. This is cpu intensive, but tracks noise variations faster. Only valid if frequency source updates at loop rate, ie Bi-Directional DShot telemetry.
+3                                               Enables notches on every IMU instead of just the primary. This is cpu intensive, but allows better lane switching decisions in noisy situations and for debugging. Not recommended for F4 boards.
+4                                               Triple overlapping Notches
+==========================================      =======================
 
-.. _common-imu-notch-filtering-helicopter-setup:
+.. note:: double notch option is no longer recommended since the triple notch option has been added. With a double notch, the maximum attenuation is either side of the center frequency, so on smaller aircraft with a very pronounced peak their use is usually counter productive.
 
-----------------------------
-Traditional Helicopter Setup
-----------------------------
-Perform the Pre-Flight Setup and Flight and Post-Flight Analysis sections of the Multicopter Setup shown above.  However for the Post-Flight Analysis just plot the FFT.  From the FFT you should see spikes at the frequency of your rotor speed in Hz (RPM/60) and harmonics of that frequency.  In the image below, the rotor speed is 25hz.  Note that the next two biggest spikes occur at 50 Hz and 100 Hz.
 
-.. image:: ../../../images/imu-batchsampling-fft-mp3.png
-    :target:  ../_images/imu-batchsampling-fft-mp3.png
-    :width: 450px
+.. note:: Each notch has some CPU cost so if you configure multiple notches you can end up with many notches on your aircraft. For example, triple single (no harmonics) notches, using ESC telemetry will result in 3 notches per motor or 12 total notches. For example, with F4 cpus this should be acceptable, but enabling a second group of triple notches with :ref:`INS_HNTC2_ENABLE<INS_HNTC2_ENABLE>` or multiple harmonic notches, could cause problems.
 
-In most cases, only the rotor speed frequency, the second harmonic and 4th harmonic.
 
-Static Harmonic Notch
-=====================
-If there is not an RPM sensor, the harmonic notch reference frequency will be set and will not change.  If the rotor speed in RPM based on settings of the ESC governor or the internal RSC governor is known, then that value converted to Hz would be used to set the harmonic notch reference frequency.  So here are the settings for the static harmonic notch.  Note that the parameter :ref:`INS_HNTCH_REF <INS_HNTCH_REF>` is set to zero for the static harmonic notch.
 
-- Set :ref:`INS_HNTCH_ENABLE <INS_HNTCH_ENABLE>` = 1 to enable the harmonic notch
-- Set :ref:`INS_HNTCH_REF <INS_HNTCH_REF>` = 0 to set the harmonic notch reference value for the static harmonic notch
-- Set :ref:`INS_HNTCH_FREQ <INS_HNTCH_FREQ>` = Rotor Speed in Hz to set the harmonic notch reference frequency
-- Set :ref:`INS_HNTCH_BW <INS_HNTCH_BW>` = 10 to set the harmonic notch bandwidth
-- Set :ref:`INS_HNTCH_HMNCS <INS_HNTCH_HMNCS>` = 11 to set 1st, 2nd, and 4th harmonics
+.. toctree::
+    :hidden:
 
-Dynamic Harmonic Notch
-======================
-If there is an RPM sensor set up on RPM 1, the harmonic notch reference frequency can be set dynamically using the RPM 1 sensor.  The harmonic notch reference frequency parameter, :ref:`INS_HNTCH_FREQ <INS_HNTCH_FREQ>`, is used to indicate the lowest rotor speed for which the RPM sensor should be used to dynamically set the harmonic notch reference frequency.  It is recommended that this be set to half of the governed rotor speed.
+    Throttle Based <common-throttle-based-notch>
+    RPM Sensor<common-rpm-based-notch>
+    ESC Telemetry<common-esc-telem-based-notch>
+    In-Flight FFT <common-imu-fft>
+    Traditional Heli Notch Filter Setup<common-imu-notch-filtering-helicopter-setup>
 
-First, ensure that the RPM 1 data is valid and scaled to the rotor speed using the :ref:`RPM_SCALING<RPM_SCALING>` parameter.  Then set the :ref:`INS_HNTCH_REF <INS_HNTCH_REF>` parameter to 1 which will enable the dynamic setting of the harmonic notch.  The harmonic notch feature will automatically scale the RPM sensor data to Hz.  If for some reason the RPM sensor can not be set to the rotor speed, then the :ref:`INS_HNTCH_REF <INS_HNTCH_REF>` parameter can be used to scale the RPM Sensor data.  For example, let's say the RPM sensor was measuring engine RPM which was geared at 10 to 1 to the rotor RPM.  Then the :ref:`INS_HNTCH_REF <INS_HNTCH_REF>` parameter would be set to 0.1 to scale the RPM sensor data for the rotor RPM.  So here are the settings for the dynamic harmonic notch.
-
-- Set :ref:`INS_HNTCH_ENABLE <INS_HNTCH_ENABLE>` = 1 to enable the harmonic notch
-- Set :ref:`INS_HNTCH_REF <INS_HNTCH_REF>` = 1 to set the harmonic notch reference value to the RPM sensor data.
-  RPM sensor data is automatically scaled to Hz.
-- Set :ref:`INS_HNTCH_FREQ <INS_HNTCH_FREQ>` = half of governed Rotor Speed in Hz to set the lower bound of the
-  dynamic harmonic notch reference frequency.
-- Set :ref:`INS_HNTCH_BW <INS_HNTCH_BW>` = 10 to set the harmonic notch bandwidth
-- Set :ref:`INS_HNTCH_HMNCS <INS_HNTCH_HMNCS>` = 11 to set 1st, 2nd, and 4th harmonics
-
-Checking Harmonic Notch Effectiveness
-=====================================
-After setting up the harmonic notch, the effect on the control signal data can be checked using the instructions for Post Configuration Flight and Post-Flight Analysis in the multicopter setup section above.
-
-.. _common-imu-notch-filtering-static-notch:
-
-------------
-Static Notch
-------------
-In addition to the harmonic notch it is also possible to configure an independent static notch filter. You might want to do this where you have significant frame or propeller resonance at a particular throttle value. Analysis is identical to that for the :ref:`harmonic notch<common-imu-notch-filtering-flight-and-post-flight-analysis>`, but this time do the analysis after configuring the harmonic notch so that you can see any residual vibration.
-
-- Set :ref:`INS_NOTCH_ENABLE <INS_NOTCH_ENABLE>` = 1 to enable the static notch
-- Set :ref:`INS_NOTCH_FREQ <INS_NOTCH_FREQ>` = resonant peak in Hz to set the notch center frequency
-- Set :ref:`INS_NOTCH_BW <INS_NOTCH_BW>` = the notch bandwidth, a reasonable default is half of the center frequency
-- Set :ref:`INS_NOTCH_ATT <INS_NOTCH_ATT>` = the notch attenuation, higher attenuation will make the notch deeper and narrower

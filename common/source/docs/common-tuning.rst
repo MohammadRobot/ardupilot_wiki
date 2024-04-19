@@ -6,18 +6,22 @@ Tuning
 
 With the default PID settings, ArduPilot will fly most RC vehicles
 safely right out of the box. To fly well, with tight navigation and
-reliable performance in wind, you’ll want to tune your autopilot
-parameters. The following topics shown you how.
+reliable performance in the wind, you’ll want to tune your autopilot
+parameters. The following topics show you how.
 
 [site wiki="copter"]
 .. toctree::
     :maxdepth: 1
 
     Tuning Process Instructions <tuning-process-instructions>
+    Setting up for Tuning <setting-up-for-tuning>
+    Initial Tuning Flight <initial-tuning-flight>
+    Evaluating the Tune <evaluating-the-aircraft-tune>
+    Manual Tuning <ac_rollpitchtuning>
+    QuikTune <quiktune>
     AutoTune <autotune>
-    Manual Roll and Pitch Tuning <ac_rollpitchtuning>
-    Basic Tuning <basic-tuning>
-    Advanced Tuning <tuning>
+    Input Shaping <input-shaping>
+    Throttle Boost <throttle-boost>
     Transmitter Based Tuning <common-transmitter-tuning>
     Configuring Notch Filtering <common-imu-notch-filtering>
     Configuring In-Flight FFT <common-imu-fft>
@@ -25,7 +29,8 @@ parameters. The following topics shown you how.
 -----
 
 .. image:: ../../../images/banner-freespace.png
-   :target: https://freespace.solutions/
+   :target: https://freespacesolutions.com.au/
+
 
 [/site]
 
@@ -35,7 +40,8 @@ parameters. The following topics shown you how.
 
     Tuning QuickStart <tuning-quickstart>
     Automatic Tuning with AUTOTUNE <automatic-tuning-with-autotune>
-    Roll, Pitch and Yaw Controller Tuning <roll-pitch-controller-tuning>
+    Manual Roll, Pitch and Yaw Controller Tuning(firmware 4.1 and after) <new-roll-and-pitch-tuning>
+    Manual Roll, Pitch and Yaw Controller Tuning(firmware before 4.1) <roll-pitch-controller-tuning>
     Navigation Tuning <navigation-tuning>
     Cruise Speed Tuning <tuning-cruise>
     TECS (Total Energy Control System) for Speed & Height – Tuning Guide <tecs-total-energy-control-system-for-speed-height-tuning-guide>
@@ -45,3 +51,8 @@ parameters. The following topics shown you how.
 
 
 [copywiki destination="copter,plane"]
+
+
+
+
+

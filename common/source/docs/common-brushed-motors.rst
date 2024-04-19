@@ -18,9 +18,11 @@ ArduPilot supports multiple methods to control brushed motors
 Verified Motor Drivers
 ----------------------
 
-- `Sabertooth Dual 32A Motor Driver  <https://www.dimensionengineering.com/products/sabertooth2x32>`__ support "Brushed BiPolar"
-- `Pololu G2 High-Power Motor Driver <https://www.pololu.com/product/2991>`__ support "BrushedWithRelay"
-- `RoboClaw 2x7A Motor Controller <https://www.pololu.com/product/3284>`__ supports "Brushed BiPolar"
+- `Sabertooth Dual 32A Motor Driver  <https://www.dimensionengineering.com/products/sabertooth2x32>`__ supports "Normal" when the Sabertooth is in RC Mode
+- `Pololu G2 High-Power Motor Driver <https://www.pololu.com/product/2991>`__ supports "BrushedWithRelay"
+- `Pololu DRV8838 Motor Driver <https://www.pololu.com/product/2990>`__ supports "BrushedWithRelay"
+- `RoboClaw 2x7A Motor Controller <https://www.pololu.com/product/3284>`__ supports "Normal" when the Roboclaw is in RC Mode
+- `L298N Motor Driver <https://www.amazon.com/s?k=l298n+motor+driver>`__ . See also `these setup instructions <https://github.com/jazzl0ver/ardupilot-rover-l298n>`__
 - :ref:`SkyRocket <copter:skyrocket>` drones use "Brushed" motors
 
 Connection and Configuration
@@ -37,6 +39,9 @@ Connection and Configuration
 - Set :ref:`MOT_PWM_TYPE <MOT_PWM_TYPE>` = 3 for "BrushedWithRelay" or "4" for "BrushedBIPolar" and reboot the autopilot
 - :ref:`MOT_PWM_FREQ <MOT_PWM_FREQ>` defaults to 16000 but can be changed to any value from 1000 to 20000 to change the output frequency
 [/site]
+
+.. note:: in some ground control stations, attempting to set this parameter above its normal 50 to 490hz range will require the user to acknowledge this "out of range" setup in order to set the parameter. This is to prevent accidental miss-configuration for brushless ESCs.
+
 
 .. warning::
 

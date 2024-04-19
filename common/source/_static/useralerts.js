@@ -5,7 +5,7 @@ Written by Stephen Dade (stephen_dade@hotmail.com)
 [copywiki destination="copter,plane,rover,antennatracker"]
 */
 $(document).ready(function() {
-    $.getScript("https://firmware.ardupilot.org/userAlerts/manifest.js", function() {
+    $.getScript("https://firmware.ardupilot.org/useralerts/manifest.js", function() {
     // figure out which vehicle's wiki we are in
     var url = window.location.href;
     if (url.search("copter") !== -1) {
@@ -28,6 +28,23 @@ $(document).ready(function() {
               if (userAlerts[key].affectedFirmware[i] === "all" || userAlerts[key].affectedFirmware[i] === vehicle) {
                     content += '<tr id="' + key + '">';
                     content += '<td>' + key.slice(0, -5) + '</td>';
+                    
+                    if (userAlerts[key].criticality == "1") {
+                        content += '<td>Critical (1)</td>';
+                    }
+                    else if (userAlerts[key].criticality == "2") {
+                        content += '<td>Critical (2)</td>';
+                    }
+                    else if (userAlerts[key].criticality == "3") {
+                        content += '<td>Major (3)</td>';
+                    }
+                    else if (userAlerts[key].criticality == "4") {
+                        content += '<td>Minor (4)</td>';
+                    }
+                    else {
+                        content += '<td>Unknown (' + userAlerts[key].criticality + ')</td>';
+                    }
+                    
                     content += '<td>' + ((userAlerts[key].hardwareLimited.length === 0 ) ? 'all' : userAlerts[key].hardwareLimited) + '</td>';
 
                     //figure out versions affected. 4 combinations

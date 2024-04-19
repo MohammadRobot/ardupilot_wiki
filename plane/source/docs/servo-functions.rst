@@ -4,8 +4,6 @@
 Choosing Servo Functions
 ========================
 
-.. note:: this page only applies for plane firmware version 3.8.0 and later. 
-
 The most fundamental setup for any plane is the servo output
 functions. Each type of plane frame type will require different servo output functions 
 to controls its motor(s) and control surfaces. Flight boards vary in the number of outputs 
@@ -37,10 +35,6 @@ corresponding SERVOn_FUNCTION parameter. The defaults are:
    <tr><td>SERVO3_FUNCTION</td><td>70</td><td>throttle</td></tr>
    <tr><td>SERVO4_FUNCTION</td><td>21</td><td>rudder</td></tr>
    </table>
-   
-Note that this is very different from firmware versions prior to 3.8,
-where the function of the first 4 outputs was fixed, and outputs above
-4 could be set using the RCn_FUNCTION parameters.
 
 Available Output Functions
 ==========================
@@ -58,7 +52,12 @@ Controlling Servo Throw, Trim and Reversal
 ==========================================
 
 In addition to the function, each servo output also has parameters to
-control the servo throw, the trim and servo reversal.
+control the servo throw, the trim and servo reversal. Normally, no adjustment is needed, but can be modified to match your
+servo's capabilities and range. While these values can be used to adjust throw and trim center of a flying surface, it is best to 
+do so mechanically. :ref:`SERVO_AUTO_TRIM<SERVO_AUTO_TRIM>` can be used to fine adjust the TRIM value automatically in flight, instead of manually changing
+the mechanical trim. NEVER try to trim a plane with the transmitter trims as this will destroy the RC Calibration values (See :ref:`common-radio-control-calibration`).
+
+When using reversing ESCs, these values may be needed to be adjusted (See :ref:`reverse-thrust-setup` )
 
 The parameters are:
 
@@ -83,12 +82,6 @@ For example, if you have:
 then that would setup servo output 5 as a reversed left elevon, with a
 throw from 1000 to 2000, and a trim of 1504.
 
-.. note:: The reversed parameter is different from the REV parameters
-          in firmware versions 3.7 and earlier. In 3.7 the RC2_REV
-          value was 1 for not reversed and -1 for reversed, which
-          means it was a multipler. In 3.8 the REVERSED parameter is a
-          boolean, where 1 means reversed, and 0 means not reversed.
-
 Multiple Outputs for One Type
 =============================
 
@@ -105,7 +98,7 @@ Setup of Specific Aircraft Types
 Now that you understand the basics of the servo output functions you
 should read the guide for your particular type of aircraft.
 
-Before you do that however, you should make sure you have correctly
+Before you do that, however, you should make sure you have correctly
 setup your :ref:`RC inputs <rc-throw-trim>`.
 
 .. toctree::
@@ -116,15 +109,15 @@ setup your :ref:`RC inputs <rc-throw-trim>`.
     VTail Planes <guide-vtail-plane>
     Orinthopter <ornithopter>
 
-For Quadplanes, including Tailsitters and Tilt-Rotors, see these sections: :ref:`quadplane-support` , :ref:`guide-tailsitter` , :ref:`guide-tilt-rotor` 
+For QuadPlanes, including Tailsitters and Tilt-Rotors, see these sections: :ref:`quadplane-support`, :ref:`guide-tailsitter`, :ref:`guide-tilt-rotor` 
 
 .. note:: You can combine setups for more complex aircraft. So for example, you could setup a vtail tiltrotor quadplane by combining functions from the guides above.
 
 
 Auxiliary Flying Surfaces
--------------------------
+=========================
 
-In addition, auxiliary control surfaces, such as flaps and spoilers can be configured:
+In addition, auxiliary control surfaces, such as flaps, spoilers and airbrakes can be configured:
 
 .. toctree::
     :maxdepth: 1
@@ -132,3 +125,5 @@ In addition, auxiliary control surfaces, such as flaps and spoilers can be confi
     Differential Spoilers & Full House Wing <differential-spoilers>
     Flaperons <flaperons-on-plane>
     Automatic Flaps <automatic-flaps>
+    Airbrakes <airbrakes-on-plane>
+    Rudder, Yaw, and Yaw Control <yaw-in-plane>

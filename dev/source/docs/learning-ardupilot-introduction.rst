@@ -27,28 +27,27 @@ Vehicle Code
 ------------
 
 The vehicle directories are the top level directories that define the
-firmware for each vehicle type.  Currently there are 5 vehicle types: Plane, Copter, Rover, Sub and AntennaTracker.
-Although There are a lot of common elements between different vehicle types, they are each different. For now we only have a :ref:`detailed description of the code structure for the Copter code <apmcopter-code-overview>`.
+firmware for each vehicle type.  Currently, there are 6 vehicle types: Plane, Copter, Rover, Sub, Blimp and AntennaTracker.
+Although there are a lot of common elements between different vehicle types, they are each different. For now, we only have a :ref:`detailed description of the code structure for the Copter code <apmcopter-code-overview>`.
 
-Along with the \*.cpp files, each vehicle directory contains a make.inc
-file which lists library dependencies. The Makefiles read this to create
-the -I and -L flags for the build.
+Along with the \*.cpp files, each vehicle directory contains a wscript
+file which lists library dependencies.
 
 Libraries
 ---------
 
 The `libraries <https://github.com/ArduPilot/ardupilot/tree/master/libraries>`__ are
-shared amongst the four vehicle types Copter, Plane, Rover and AntennaTracker.  These libraries include sensor drivers, attitude and position estimation (aka :ref:`EKF <ekf>`) and control code (i.e. PID controllers).
+shared amongst all vehicle types.  These libraries include sensor drivers, attitude and position estimation (aka :ref:`EKF <ekf>`) and control code (i.e. PID controllers).
 See the :ref:`Library Description <apmcopter-programming-libraries>`, :ref:`Library Example Sketches <learning-ardupilot-the-example-sketches>` and :ref:`Sensor Drivers <code-overview-sensor-drivers>` pages for more details.
 
 AP_HAL
 -------
 
 The AP_HAL layer (Hardware Abstraction Layer) is how we make ArduPilot
-portable to lots of different platforms. There is a top level AP_HAL in
+portable to lots of different platforms. There is a top-level AP_HAL in
 libraries/AP_HAL that defines the interface that the rest of the code
-has to specific board features, then there is a AP_HAL_XXX
-subdirectory for each board type, for example AP_HAL_AVR for AVR based
+has to specific board features, and then there is a AP_HAL_XXX
+subdirectory for each board type, for example, AP_HAL_AVR for AVR based
 boards, AP_HAL_PX4 for Pixhawk boards and AP_HAL_Linux for Linux based
 boards.
 
@@ -56,7 +55,7 @@ Tools directories
 ~~~~~~~~~~~~~~~~~
 
 The tools directories are miscellaneous support directories. For
-examples, tools/autotest provides the autotest infrastructure behind the
+example, tools/autotest provides the autotest infrastructure behind the
 `autotest.ardupilot.org <https://autotest.ardupilot.org/>`__ site and
 tools/Replay provides our log replay utility.
 

@@ -12,11 +12,6 @@ before flight has two purposes:
 -  prevent takeoff before the autopilot is fully configured and ready to
    fly
 
-In past releases of ArduPlane, arming was optional, and the requirement
-to arm (controlled by the :ref:`ARMING_REQUIRE<ARMING_REQUIRE>` parameter) was disabled by
-default. This was changed for the 3.3.0 release to require arming by
-default.
-
 The key thing that arming does is to enable the motor. You will not be
 able to start the motor (ie. control the throttle) until the aircraft is
 armed.
@@ -28,7 +23,7 @@ crash.
 
    This feature in no way removes the need to respect the
    prop! When the plane is powered, ALWAYS avoid placing hands in
-   the vicinity of the propellor, even when the throttle is
+   the vicinity of the propeller, even when the throttle is
    disarmed. If all is not well with the autopilot electronics or software
    there is always a slight possibility that signal could unintentionally
    reach the motor. Even though this is unlikely (and made even less likely
@@ -40,19 +35,21 @@ Configuring Arming
 
 There are three parameters which control how arming works:
 
--  **ARMING_REQUIRE**: this controls whether an arming step is
+-  :ref:`ARMING_REQUIRE<ARMING_REQUIRE>`: this controls whether an arming step is
    required. The default is 1, meaning that arming is required before
    takeoff. If set to 0 then arming is not required (the plane starts
    off armed).
--  **ARMING_CHECK**: this controls what checks the autopilot does
+-  :ref:`ARMING_CHECK<ARMING_CHECK>`: this controls what checks the autopilot does
    before arming is allowed. The default is 1, meaning all checks are
    done. Most users should leave it at 1, as the arming checks are
    important to ensure the autopilot is ready. See below.
--  **ARMING_RUDDER**: This parameter allows you to configure rudder
+-  :ref:`ARMING_RUDDER<ARMING_RUDDER>`: This parameter allows you to configure rudder
    based arming/disarming. The default is 1, meaning you are able to
    arm with right rudder. If you set this to 2 you can also disarm
    with left rudder. If you set this to 0 then you will only be able
    to arm/disarm via a ground station or RC channel input using its RCx_OPTION.
+   
+.. warning:: if :ref:`ARMING_RUDDER<ARMING_RUDDER>` is set to 2, then held left rudder can disarm the vehicle in ANY mode, if the autopilot judges that the vehicle is not flying. This flying check CAN be incorrect under certain extreme circumstances, and disarming of the vehicle while still in flight, while rare, could occur.
 
 Arming Checks
 =============
@@ -78,11 +75,14 @@ How to Arm
 ==========
 
 When you are ready to fly you can ask Plane to arm. This can be done in
-two ways:
+three ways:
 
 -  **Rudder Arming**. Hold the rudder stick fully to the right and the
-   throttle stick fully down for 2 seconds.
--  **Arming Switch**. An RC channel can be configured as an ARM/DISARM switch by using the RCx_OPTION for that channel set to 41.
+   throttle stick fully down for 3 seconds.
+
+.. note:: when rudder arming in QuadPlanes with an autotakeoff, the motors will spin at :ref:`Q_M_SPIN_ARM<Q_M_SPIN_ARM>` and not takeoff until the rudder stick is returned to neutral. Similarly, for normal plane MODE TAKEOFF, or NAV_TAKEOFFs, the arming will not actually occur until the rudder stick is returned to neutral to prevent the takeoff starting with full right rudder.
+
+-  If setup, you can use one of the **RC_xOPTION switches** that includes that function. See switch option "153", "154, or "160".
 -  **GCS Arming**. Press the arming button on your ground station
 
 .. figure:: ../../../images/armingButtonMissPlan.jpg
@@ -90,17 +90,23 @@ two ways:
 
    Location of the Arm/Disarm button in Mission Planner (button circled in red near the bottom of the image).
 
+.. note:: Plane does not allow arming in RTL, QRTL, or QLAND modes. Arming in other throttle controlled modes, like LOITER,CRUISE,etc. is possible, but only if actually flying (ie after an accidental inflight disarm, watchdog reset, etc.)
+
 How to Disarm
 =============
 
-Since ArduPlane 3.4.0 it is possible to disarm using the transmitter.
+-  If setup, you can use one of the ``RC_xOPTION`` switches that includes that function. See switch option "81", "153, or "154".
+
+.. warning:: This is **UNCONDITIONAL**. If done while in flight, all motors disarm and you must have throttle at idle before re-arming can occur!
+
+It is also possible to disarm using the transmitter.
 This is done holding throttle at minimum and rudder to the left for 2
 seconds. In ArduPlane this condition could be accidentally triggered by
 pilots while flying so there are additional requirements prior to disarm:
 
 -  You need to allow rudder disarming by changing **ARMING_RUDDER**
    parameter to 2 (ArmOrDisarm) or use the ARM/DISARM switch function provided by 
-   setting an RC channel's RCx_OPTION to 41.
+   setting an RC channel's RCx_OPTION to 153.
 -  The autopilot needs to make sure that you are not actually
    flying. There is an algorithm for this that uses the **airspeed sensor**
    readings. So you need this source available and giving values lower
@@ -111,8 +117,8 @@ You can also disarm without using the transmitter with one of the
 following methods:
 
 -  use a ground station to issue a disarm command
--  use the safety switch on your aircraft (on Pixhawk)
--  after an auto-landing the plane will automatically disarm after 20
+-  use the safety switch on your aircraft (if using a :ref:`common-safety-switch-pixhawk`)
+-  after an auto-landing (either via mission or QLAND in QuadPlane) the plane will automatically disarm after 20
    seconds if still on the ground (controlled by :ref:`LAND_DISARMDELAY<LAND_DISARMDELAY>`
    parameter)
 
@@ -134,6 +140,8 @@ your autopilot has notification LEDs and a buzzer. The clues are:
 See the :ref:`sounds page <common-sounds-pixhawkpx4>` to listen to what the
 buzzer sounds like for each state.
 
+Unless the :ref:`ARMING_OPTIONS<ARMING_OPTIONS>` bit 2 is set, text messages will be sent to the GCS to indicate when arming or disarming has occurred.
+
 Throttle output when disarmed
 =============================
 
@@ -152,11 +160,18 @@ Diagnosing failure to arm
 It can be frustrating if your plane refuses to arm. To diagnose arming
 issues follow this guide
 
-Check it is ready to arm
-------------------------
+In Landing Sequence Pre-Arm Failure
+-----------------------------------
+
+If the last mission item was a landing sequence or land command, then arming is prevented and a "Prearm: In Landing Sequence" message is presented. This can occur after an autoland, or if the autopilot is booted before RC is established and the failsafe mode uses a landing sequence (ie :ref:`do-land-start` and :ref:`RTL_AUTOLAND<RTL_AUTOLAND>` is set, QLAND, etc.). 
+
+This may be cleared by restarting the mission using the GCS or :ref:`common-auxiliary-functions` switch, or rebooting with RC active.
+
+Check that it is ready to arm
+-----------------------------
 
 If your board has a "ready to arm" LED (the large LED in the middle of
-the board on a Pixhawk) then that LED should be flashing green when the
+the board on a Pixhawk, for example) then that LED should be flashing green when the
 board is ready to arm. If it is flashing yellow then that indicates that
 one of the arming checks is not passing.
 
@@ -208,8 +223,7 @@ autopilot can refuse to arm are (See the :ref:`common-prearm-safety-checks` topi
    materials.
 -  **EKF warmup**. This happens when the EKF is still warming up. Wait
    another 10 seconds and try again.
--  **AHRS not healthy**. This means the EKF is not healthy. If the error
-   persists then try rebooting your board.
+-  **AHRS not healthy**. This means the EKF is not healthy. Often this is due to large variations in GPS position and/or velocity reports, even if a solid 3D lock is reported by the GPS and HDOP is low. Be sure your GPS has a clear "view" of the sky with no obstructions. If the error persists then try rebooting your board.
 -  **3D accel cal needed**. This happens when you have not done a 3D
    accelerometer calibration.
 -  **Inconsistent accelerometers**. This happens when you have multiple
@@ -222,8 +236,8 @@ autopilot can refuse to arm are (See the :ref:`common-prearm-safety-checks` topi
    itself after 30 seconds then you will need to reboot.
 -  **Limit errors**. The arming checks some of your parameter settings
    to make sure they are in a reasonable range. The checks are
-   "LIM_ROLL_CD too small", "LIM_PITCH_MAX too small",
-   "LIM_PITCH_MIN too large", "invalid THR_FS_VALUE".
+   "ROLL_LIMIT_DEG too small", "PTCH_LIM_MAX_DEG too small",
+   "PTCH_LIM_MIN_DEG too large", "invalid THR_FS_VALUE".
 -  **GPS n has not been fully configured**. This happens with a uBlox
    GPS where the GPS driver is unable to fully configure the GPS for
    the settings that are being requested. This can be caused by a bad

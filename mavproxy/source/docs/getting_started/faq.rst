@@ -15,7 +15,7 @@ Frequently Asked Questions and Issues
 
 #. Which Flight controllers are compatible with MAVProxy?
 
-    The APM branches (`APM:Plane <http://plane.ardupilot.com/>`_, `APM:Copter <http://copter.ardupilot.com/>`_, `APM:Rover <http://rover.ardupilot.com/>`_) are fully compatible. Other Mavlink-based flight controllers (such as the `PX4 <http://px4.io/>`_ stack) should be compatible, but may show all flight data.
+    The ArduPilot vehicle types (`ArduPlane <https://ardupilot.org/plane/>`_, `ArduCopter <https://ardupilot.org/copter/>`_, `ArduSub <http://www.ardusub.com/>`_ and `ArduRover <https://ardupilot.org/rover/>`_) are fully compatible. Other Mavlink-based flight controllers (such as the `PX4 <https://px4.io/>`_ stack) should be compatible, but may not show all flight data.
 
 
 #. How do I output a TCP connection to another GCS program?
@@ -24,5 +24,5 @@ Frequently Asked Questions and Issues
     
 #. How do I disable other GCS sub-clients (from ``--out``) from sending commands to the flight controller?
 
-    The ability to foward commands sent by other sub-clients is enabled by default. It can be disabled by typing ``set mavfwd false``
+    The ability to forward commands sent by other sub-clients is enabled by default. It can be disabled by typing ``set mavfwd false``
     

@@ -4,6 +4,8 @@
 PPM Encoder
 ===========
 
+.. warning:: **Archived**
+
 The PPM encoder allows to encode up to 8 PWM (pulse width modulated)
 signals into one PPM (pulse position modulation) signal.
 
@@ -117,7 +119,7 @@ Following fuse settings should be used when programming with AVR Studio:
 
 - LOW: 0xFF
 - High: 0xDA
-- Ext: 0xFD
+- Ext: 0x07
 
 
 Re-Programming instructions for Windows

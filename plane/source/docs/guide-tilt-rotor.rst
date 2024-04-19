@@ -14,9 +14,8 @@ where transition between hover and forward flight is accomplished by
 tilting one or more rotors so that it provides forward thrust instead
 of upward thrust.
 
-This is distinct from :ref:`tailsitters <guide-tailsitter>` where the
-autopilot and main fuselage change orientation when moving between
-hover and forward flight.
+.. note:: This is distinct from :ref:`tailsitters <guide-tailsitter>` where the autopilot and main fuselage change orientation when moving between hover and forward flight. Do  not use the information below for a Tailsitter, some parameters are shared, but use the  instructions in the :ref:`guide-tailsitter`.
+
 
 Types of Tilt-Rotors
 ====================
@@ -47,10 +46,9 @@ Setting Up A Tilt-Rotor
 =======================
 
 The first thing you need to do is enable QuadPlane support by setting
-:ref:`Q_ENABLE<Q_ENABLE>` to 1, and then choose the right quadplane frame class and
-frame type.
+:ref:`Q_ENABLE<Q_ENABLE>` to 1 and Tilt Rotor support by setting :ref:`Q_TILT_ENABLE<Q_TILT_ENABLE>` = "1", and then choose the right quadplane frame class and frame type.
 
-The quadplane frame class is in :ref:`Q_FRAME_CLASS<Q_FRAME_CLASS>` . The frame class is
+The quadplane frame class is in :ref:`Q_FRAME_CLASS<Q_FRAME_CLASS>`. The frame class is
 chosen based on your vehicles rotor configuration while
 hovering. Currently supported tilt-rotor frame classes are:
 
@@ -64,11 +62,14 @@ hovering. Currently supported tilt-rotor frame classes are:
    <tr><td>Octaquad</td><td>4</td></tr>
    <tr><td>Y6</td><td>5</td></tr>
    <tr><td>Tricopter</td><td>7</td></tr>
+   <tr><td>Bicopter</td><td>10</td></tr>
    </table>
+
+.. note: the BiCopter tilt-rotor QuadPlane is a special case. It requires that :ref:`Q_FRAME_CLASS<Q_FRAME_CLASS>` be set to 10 which is reserved for Tailsitter configurations only, normally. See :ref:`BiCopter <bicopter>`  below.
 
 Once you have chosen your frame class you will need to get the
 :ref:`Q_FRAME_TYPE<Q_FRAME_TYPE>` right. The :ref:`Q_FRAME_TYPE<Q_FRAME_TYPE>` is the sub-type of frame. For
-example, for a quadcopter, a frame type of 1 is for a "X" frame and a
+example, for a Quadcopter, a frame type of 1 is for a "X" frame and a
 frame type of 3 is for a "H" frame. For Tri and Y6, this parameter is ignored.
 
 Please see the ArduCopter setup guide for multi-copters for more
@@ -86,7 +87,7 @@ The most important parameter for a tilt-rotor is the tilt-mask, in the
 The :ref:`Q_TILT_MASK<Q_TILT_MASK>` is a bitmask of what motors can tilt on your
 vehicle. The bits you need to enable correspond to the motor ordering
 of the standard ArduCopter motor map for your chosen frame class and
-frame type.
+frame type, ie. bit 0 corresponds to Motor 1.
 
 For example, if you have a tilt-tricopter where the front two motors
 tilt, then you should set :ref:`Q_TILT_MASK<Q_TILT_MASK>` to 3, which is 2+1.
@@ -120,7 +121,9 @@ parameter. Valid values are:
    <tr><td>Continuous</td><td>0</td></tr>
    <tr><td>Binary</td><td>1</td></tr>
    <tr><td>Vectored</td><td>2</td></tr>
+   <tr><td>BiCopter</td><td>3</td></tr>
    </table>
+
 
 Tilt Servos
 ===========
@@ -128,22 +131,21 @@ Tilt Servos
 Next you need to configure which servo outputs will control tilt of
 the tiltable rotors.
 
-You control that with 3 possible servo function values.
+You control that with the following servo function values.
 
 .. raw:: html
 
    <table border="1" class="docutils">
    <tr><th>Tilt Control</th><th>SERVOn_FUNCTION</th></tr>
-   <tr><td>Motor tilt</td><td>41</td></tr>
-   <tr><td>Left Motor tilt</td><td>75</td></tr>
-   <tr><td>Right Motor tilt</td><td>76</td></tr>
+   <tr><td>TiltMotorsFront</td><td>41</td></tr>
+   <tr><td>TiltMotorFrontLeft</td><td>75</td></tr>
+   <tr><td>TiltMotorFrontRight</td><td>76</td></tr>
+   <tr><td>TiltMotorsRear</td><td>45</td></tr>
+   <tr><td>TiltMotorRearLeft</td><td>46</td></tr>
+   <tr><td>TiltMotorRearRight</td><td>47</td></tr>
    </table>
 
-You should choose normal ``Motor tilt`` unless you are configuring a
-vectored yaw aircraft and have set :ref:`Q_TILT_TYPE<Q_TILT_TYPE>` to 2.
-
-For example, if you have a single servo which tilts your rotors
-attached to servo output 11, then you should set :ref:`SERVO11_FUNCTION<SERVO11_FUNCTION>` =41.
+.. note:: For Vectored Yaw applications, the right and left tilt servos would be used for front and/or back. You should choose normal ``TiltMotorsFront`` and/or ``TiltMotorsRear`` otherwise.
 
 Tilt Reversal and Range
 =======================
@@ -201,12 +203,19 @@ ArduPilot tilt-rotor code:
 - once a forward transition is completed then the motors will cover
   any remaining angle at 90 degrees per second.
 
-.. note:: For Binary type tilt servos these rates should be set at the actual measured rate of the servo since it's independent of ArudPilot control.
+.. note:: For Binary type tilt servos these rates should be set at the actual measured rate of the servo since it's independent of ArduPilot control.
+
+Tilt Stabilization Assist in Fixed Wing Flight
+==============================================
+
+It is possible to use the tilt motors (if not the BINARY tilt type) to aid in fixed wing roll and pitch control. This is activated if the :ref:`Q_TILT_FIX_GAIN<Q_TILT_FIX_GAIN>` is greater than zero, which determines how much control demand results in tilting of the motors. The maximum tilt angle achievable is determined by the :ref:`Q_TILT_FIX_ANGLE<Q_TILT_FIX_ANGLE>` parameter. It is recommended to start with 0.1 for the :ref:`Q_TILT_FIX_GAIN<Q_TILT_FIX_GAIN>` and work your way up to desired the response.
+
+In order to setup the ranges of the servo movement, see :ref:`tilt-rotor-setup`.
 
 Vectored Yaw
 ============
 
-Vectored yaw aircraft tilt the left and right rotors separately to
+Vectored yaw aircraft tilt the left and right rotors (front and/or rear, if used) separately to
 control yaw in hover. This reduces mechanical complexity in
 tilt-tricopters as it avoids the need for a tilt servo for the rear
 motor for yaw control.
@@ -216,12 +225,14 @@ also set :ref:`Q_TILT_YAW_ANGLE<Q_TILT_YAW_ANGLE>` to the angle in degrees that 
 can go up past 90 degrees.
 
 For example, if you have a tilt-tricopter with vectored yaw, and your
-motors can tilt through a total of 110 degrees from forward flight,
+front motors can tilt through a total of 110 degrees from forward flight,
 then your :ref:`Q_TILT_YAW_ANGLE<Q_TILT_YAW_ANGLE>` would be 20, as that is the angle past 90
 degrees that the tilt mechanism can go.
 
 You also need to setup your two tilt servos with ``SERVOn_FUNCTION`` =75
-for left tilt and ``SERVOn_FUNCTION`` =76 for right tilt.
+for left front tilt and ``SERVOn_FUNCTION`` =76 for right front tilt.
+
+In order to setup the ranges of the servo movement, see :ref:`tilt-rotor-setup`.
 
 Non-Vectored Yaw
 ================
@@ -241,6 +252,28 @@ of the servo-channels actually connected BLHELI-ESCs.
 
 For example if your motors are connected to servo 9,10,11 (the first three aux-outputs of a pixhawk1), set :ref:`SERVO_BLH_MASK<SERVO_BLH_MASK>` to 1792.
 
+.. _bicopter:
+
+BiCopter Tilt-Rotor
+===================
+
+This is a special case of tilt-rotor QuadPlane. Setup is a bit different, but the configuration is actually a normal QuadPlane and performs QuadPlane transitions. In order to setup this vehicle configuration:
+
+- :ref:`Q_FRAME_CLASS<Q_FRAME_CLASS>` = 10 (Tailsitter, even though this is not a tailsitter!)
+- :ref:`Q_TILT_TYPE<Q_TILT_TYPE>` = 3 (BiCopter)
+
+Motor and Tilt Setup
+--------------------
+
+For motors and tilt servos,you should set the SERVOn_FUNCTION values for your two tilt servos for the left and right motors, and for the left and right motor throttles.
+
+The tilt servo limits are setup a bit differently than other Tilt Rotors. To setup, a normal tilt rotor range, you would set the :ref:`Q_TILT_YAW_ANGLE<Q_TILT_YAW_ANGLE>`, then the tilt servo's MIN and MAX output range to get vertical in QSTABLIZE and horizontal in MANUAL on the bench.The TRIM value is ignored.
+
+With this frame type, the tilt servo's MIN sets horizontal position, TRIM the vertical position, and MAX the full rearward (max  VTOL yaw). In this case, the user must set the :ref:`Q_TILT_YAW_ANGLE<Q_TILT_YAW_ANGLE>` for the amount of forward yaw from vertical (should match the rearward angle to prevent asymmetric yaw authority in one direction).
+
+.. note:: MIN and MAX may be swapped if the tilt servo had to be reversed to get proper directions.
+
+Otherwise, this frame type conforms to the normal vectored yaw tilt-rotor QuadPlane transitions, and parameters.
 
 Tilt Rotor Movement Setup
 =========================
@@ -248,14 +281,22 @@ Tilt Rotor Movement Setup
 .. toctree::
     :maxdepth: 1
 
-    Tilt Rotor Setup <tilt-rotor-tips>
+    Tilt Rotor Setup Tips<tilt-rotor-tips>
 
+Also:
+    :ref:`Tilt Rotor Servo Setup<tilt-rotor-setup>`
 
+Tilt Wing Flap Emulation
+========================
+
+Tilt Wing Tilt Rotors are where the entire wing rotates, instead of the motors. These frames use the "TiltMotorsFront" ``SERVOx_FUNCTION`` (41) to tilt the entire wing for fixed-wing or VTOL operation.
+
+You can  also set up the wing to tilt just like (or in addition to) normal manually controlled or :ref:`automaticflaps <automatic-flaps>`, and the wing will tilt in fixed wing modes just as a flap would activate. The amount of wing tilt when flaps are fully extended is set by the :ref:`Q_TILT_WING_FLAP<Q_TILT_WING_FLAP>` parameter to tilt the wing up to 15 degrees when full flaps are activated.
 
 Pre Flight Checks
 =================
 
-In addition to the normal pre-flight checks for a quadplane, you
+In addition to the normal pre-flight checks for a QuadPlane, you
 should check your tilt-rotor transition by changing between MANUAL and
 QSTABILIZE modes on the ground. Make sure that your tilt moves
 smoothly and that the servos are trimmed correctly for the right rotor

@@ -46,9 +46,9 @@ For telemetry ports used for MAVLink communication you may select to use MAVLink
 
 MAVLink2 supports "signing" of packets which improves security and flexible length messages so it should be used when possible but some older telemetry radios do not understand MAVLink2 so the default is MAVLink1.
 
-.. note:: MAVLink2 is required to upload and download complex fences in Copter and Rover from the Ground Control Station.
+.. note:: MAVLink2 is required to upload and download complex fences from the Ground Control Station.
 
-As mentioned on the :ref:`Telemetry Logs page <common-mission-planner-telemetry-logs>` the rate messages are sent from the vehicle can be controlled using the ``SRx_*`` parameters (i.e. :ref:`SR1_POSITION <SR1_POSITION>`).
+As mentioned on the :ref:`Telemetry Logs page <planner:mission-planner-telemetry-logs>` the rate messages are sent from the vehicle can be controlled using the ``SRx_*`` parameters (i.e. :ref:`SR1_POSITION <SR1_POSITION>`).
 
 SRx parameters do not directly correlate to the SERIALx port, but rather to the order of the ports which have MAVLink protocol active.
 
@@ -59,8 +59,12 @@ The Mission Planner's **Config/Tuning |Planner** screen's **Telemetry Rates** dr
 
 Due to CPU or bandwidth limitations, the actual rate of the data sent may be lower than the rate requested.
 
+.. note:: Some telemetry systems require specific rates. In order to allow those to be set in the autopilot parameters and not overriden by the GCS, set the rates to "-1" for MP, or use the disable option in QGC. However, do not set these before doing the basic autopilot radio calibration in Mission Planner as it forces new values during the calibration and will not restore them after it is finished.
+
 .. note::
 
-   Most ground stations set the desired stream rate by sending the `REQUEST_DATA_STREAM <https://mavlink.io/en/messages/common.html#REQUEST_DATA_STREAM>`__ MAVLink message to the vehicle instead of directly settting the parameters mentioned above.  If done this way, Copter **DOES NOT** save the rate changes to eeprom meaning they will not persist over a reboot.
+   Most ground stations set the desired stream rate by sending the `REQUEST_DATA_STREAM <https://mavlink.io/en/messages/common.html#REQUEST_DATA_STREAM>`__ MAVLink message to the vehicle instead of directly setting the parameters mentioned above.  If done this way, Copter **DOES NOT** save the rate changes to eeprom meaning they will not persist over a reboot.
 
    In practice users may notice that if the vehicle is rebooted but the telemetry connection is not disconnected and reconnected that the data from the vehicle may be much slower or missing.  I.e. the vehicle's position on the map may not update.  Normally disconnecting/reconnecting with the ground station will resolve this.
+
+See also :ref:`Requesting Data From The Autopilot <dev:mavlink-requesting-data>`

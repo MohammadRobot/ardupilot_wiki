@@ -21,7 +21,7 @@ Getting Involved
 New developers are always welcome! The best way to start is to:
 
 - read this wiki to learn the basics of the software and :ref:`how the team works <how-the-team-works>`
-- get involved with the other developers by posting on the `Developer Team Forum <https://discuss.ardupilot.org/c/development-team>`__, chat to us on `Gitter <https://gitter.im/ArduPilot/ardupilot>`__ or join the :ref:`weekly development call <ardupilot-discord-server>`.  You can also find a large number of users and some developers in the `ArduPilot facebook group <https://www.facebook.com/groups/ArduPilot.org>`__.  :ref:`All channels <common-contact-us>` are open to all.  Lurk for a while to get a feel for it, then participate!
+- get involved with the other developers by posting on the `Developer Team Forum <https://discuss.ardupilot.org/c/development-team>`__, chat to us on `ArduPilot Discord Chat <https://ardupilot.org/discord>`__ or join the :ref:`weekly development call <ardupilot-discord-server>`.  You can also find a large number of users and some developers in the `ArduPilot facebook group <https://www.facebook.com/groups/ArduPilot.org>`__.  :ref:`All channels <common-contact-us>` are open to all.  Lurk for a while to get a feel for it, then participate!
 - find a specific bug you'd like to fix or a feature you'd like to add (check out the `good first issues <https://github.com/ArduPilot/ardupilot/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22>`__, recent `issues from Randy <https://github.com/ArduPilot/ardupilot/issues/created_by/rmackay9>`__ or our :ref:`roadmap <roadmap>` for ideas).
 - fix the bug in your own clone and :ref:`test <simulation-2>` that it's working
 - submit the change to the main code base :ref:`via a pull request <submitting-patches-back-to-master>`.
@@ -95,12 +95,12 @@ ArduPilot dev team.
 -  `UAVCAN* <http://uavcan.org>`__ -
    Lightweight protocol designed for reliable communication in aerospace and robotic 
    applications via CAN bus. ArduPilot is using the `Libuavcan <http://uavcan.org/Implementations/Libuavcan/>`__,
-   which is a portable, cross-platform library written in C++ with minimal dependency on the C++ standard library.
+   which is a portable, cross-platform library written in C++ with minimal dependency on the C++ standard library and calls its version DroneCAN, allowing UAVCAN to evolve separately.
 
 How the team works
 ==================
 
--  Our annual developers conference is held in Feb/March in Canberra Australia (`2018 annoucement <https://discuss.ardupilot.org/t/developer-meetup-in-canberra-february-2018>`__).
+-  Our annual developers conference is held in Feb/March in Canberra Australia (`2018 announcement <https://discuss.ardupilot.org/t/developer-meetup-in-canberra-february-2018>`__).
 -  The source code for ArduPilot is managed using git on https://github.com/ArduPilot/ardupilot
 -  Pre-compiled firmware for supported autopilot boards is available from https://firmware.ardupilot.org
 -  User support is available on the `forums <https://discuss.ardupilot.org/>`__.
@@ -128,26 +128,32 @@ If you think of something that should be added to this site, please
 `open an issue for the wiki <https://github.com/ArduPilot/ardupilot_wiki/issues>`__.
 
 
-Full Table of Contents
-======================
+Table of Contents
+=================
 
 .. toctree::
    :titlesonly:
-   
+
     License (GPLv3) <docs/license-gplv3>
+    AP_Peripheral Devices <docs/ap-peripheral-landing-page>
     Downloading the code / Using Git <docs/where-to-get-the-code>
     Building the code <docs/building-the-code>
     Editors & IDEs <docs/code-editing-tools-and-ides>
     Learning the code <docs/learning-the-ardupilot-codebase>
     Simulation & Testing <docs/simulation-2>
     Debugging <docs/debugging>
+    ArduPilot On Linux <docs/ardupilot-on-linux>
+    Support Proxy <docs/support_proxy>
     Contributing Code <docs/contributing>
     MAVLink Interface <docs/mavlink-commands>
-    CAN and UAVCAN <docs/can-bus>
+    CAN and DroneCAN/UAVCAN <docs/can-bus>
     Companion Computers <docs/companion-computers>
-    ROS <docs/ros>
+    ROS/ROS2 <docs/ros>
     Lua Scripts <docs/common-lua-scripts>
     Porting to a new Flight Controller <docs/porting>
+    OEM Customization <docs/common-oem-customizations>
+    Secure Firmware <docs/secure-firmware>
+    RemoteID <docs/opendroneid>
     Advanced Hardware Info <docs/pixhawk-advanced-hardware-info>
     MAVProxy Developer GCS <docs/mavproxy-developer-gcs>
     Resources for GCS Developers <docs/gcs-resources>
@@ -155,10 +161,11 @@ Full Table of Contents
     How The Team Works <docs/how-the-team-works>
     Events <docs/events>
     Training Centers <docs/common-training-centers>
-    GSoC 2020 project ideas <docs/gsoc-ideas-list>
+    GSoC <docs/gsoc>
+    2021 Developers Conference<docs/2021-conference>
+    2022 Roadmap <https://github.com/orgs/ArduPilot/projects/2>
     Wiki Editing Guide <docs/common-wiki_editing_guide>
     USB IDs <docs/USB-IDs>
     User Alerts <docs/user-alerts-developer>
-    Upcoming Features <docs/common-master-features>
+    Academic Works Involving ArduPilot <docs/acadamic-works>
     Appendix <docs/common-appendix>
-    Full Table of Contents <docs/common-table-of-contents>

@@ -7,8 +7,8 @@ Text-to-Speech
     module load speech
     
 Activates the text-to-speech function. It will "say" any important
-annoucements throughout the flight using the system default sound harware.
+annoucements throughout the flight using the system default sound hardware.
 
 .. note::
 
-    On some Linux systems, the "python-espeak" package may be required
+    On some systems, the "python-espeak" or "python3-speechd" package may be required.

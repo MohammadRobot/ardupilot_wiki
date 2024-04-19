@@ -11,8 +11,9 @@ Supported Protocols
 ===================
 
 `I2C <https://en.wikipedia.org/wiki/I%C2%B2C>`__, `SPI <https://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus>`__,
-`UART (aka Serial) <https://en.wikipedia.org/wiki/Universal_asynchronous_receiver/transmitter>`__ and `CANBUS <https://en.wikipedia.org/wiki/CAN_bus>`__ (in particular UAVCAN) protocols are supported.
-If you plan to write a new driver, you will likely need to refer to the sensor's datasheet in order to determine which protocol it uses.
+`UART (aka Serial) <https://en.wikipedia.org/wiki/Universal_asynchronous_receiver/transmitter>`__ and `CANBUS <https://en.wikipedia.org/wiki/CAN_bus>`__ (in particular UAVCAN/DroneCAN) protocols are supported.
+
+If you plan to write a new driver, you will likely need to refer to the sensor's datasheet in order to determine which protocol it uses. Alternatively, you could utilize an intermediary node to move the necessary data back to the autopilot. 
 
 I2C
 ---
@@ -47,7 +48,7 @@ Serial / UART
 CAN bus with UAVCAN
 -------------------
 
-- multimaster bus, any node can initiate transmittion of data when they need to
+- multimaster bus, any node can initiate transmission of data when they need to
 - packet based protocol for very long distances
 - high speed, typically 1 Mb (however only 50% of the bus bitrate can really be used without major collisions)
 - at least 3 pins required (GND, CAN HI, CAN LO). Optionally VCC can be used to power nodes

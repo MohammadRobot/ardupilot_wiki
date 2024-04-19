@@ -16,11 +16,6 @@ Use the MAVExplorer->Open menu to open tlog or dataflash files to graph.
 
 .. figure:: ../../images/mavexp1.png
 
-.. note::
-
-    If there is a space in the file/folder name, MAVExplorer will not be able to open the file.
-    Only use file and folder paths with no spaces in them.
-
 The Graphs menu will automatically populate based upon the available packets in the logfile.
 
 To narrow down the log file to a particular phase of the logfile, select the relevant mode from the FlightMode menu. Any future graphs will only cover the selected section of the flight.
@@ -34,4 +29,4 @@ The Display menu contains methods for displaying a map of the GPS points of the 
     Saving custom graphs is not currently available on Windows.
     
 More information about this program can be found in the 
-`Ardupilot documentation <http://ardupilot.org/dev/docs/using-mavexplorer-for-log-analysis.html>`_.
+`ArduPilot documentation <http://ardupilot.org/dev/docs/using-mavexplorer-for-log-analysis.html>`_.

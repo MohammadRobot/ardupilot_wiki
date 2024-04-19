@@ -65,6 +65,12 @@ A slightly improved but fully compatible variant can now be obtained from mRo:
 Pixhawk connector assignments
 =============================
 
+.. warning::
+   
+   Many Pixhawk clones use Molex picoblade connectors instead of DF13 connectors.
+   They have rectangular pins, rather than square ones, and cannot be assumed compatible.
+
+
 .. image:: ../../../images/Pixhawk_with_legend.jpg
     :target: ../_images/Pixhawk_with_legend.jpg
 
@@ -676,24 +682,25 @@ Pixhawk digital outputs and inputs (Virtual Pins 50-55)
 
 The Pixhawk has no dedicated digital output or input pins on its DF13
 connectors, but you can assign up to 6 of the "AUX SERVO" connectors to
-be digital outputs/inputs. These are the first 6 of the 14 three-pin
+be digital GPIO outputs/inputs. These are the first 6 of the 14 three-pin
 servo connectors on the end of the board. They are marked as AUX servo
 pins 1 - 6 on the silkscreen as seen above.
 
 To set the number of these pins that are available as digital
-inputs/outputs, set the :ref:`BRD_PWM_COUNT<BRD_PWM_COUNT>` parameter. On Pixhawk this
+inputs/outputs, set the ``BRD_PWM_COUNT`` parameter. On Pixhawk this
 defaults to 4, which means the first 4 AUX connectors are for servos
 (PWM) and the last 2 are for digital inputs/outputs. If you set
-:ref:`BRD_PWM_COUNT<BRD_PWM_COUNT>` to 0 then you would have 6 virtual digital pins and
+``BRD_PWM_COUNT`` to 0 then you would have 6 virtual digital pins and
 still have 8 PWM outputs on the rest of the connector.
 
+.. note:: in firmware versions 4.2 and later, the method for setting a PWM/SERVO/MOTOR output to be a GPIO function is changed. Instead of ``BRD_PWM_COUNT`` being used, the individual ``SERVOx_FUNCTION`` parameter is merely set to "-1". If set to "0", it remains a PWM output, unassigned to a function, and outputs that output's trim value when board safety is not active. If the servo function is being "mirrored" to a remote device, as in the case of a DroneCAN or KDECAN ESC, then in order to change the autopilot board's corresponding output pin to be a GPIO, but allow the ``SERVOx_FUNCTION`` to still be assigned to the remote device, the :ref:`SERVO_GPIO_MASK<SERVO_GPIO_MASK>` parameter can be used to assign the board pin to be a GPIO without affecting the ``SERVOx_FUNCTION`` assignment for the remote device.
+
 The 6 possible pins are available for PIN variables as pin numbers 50 to
-55 inclusive. So if you have :ref:`BRD_PWM_COUNT<BRD_PWM_COUNT>` at the default value of 4,
-then the two digital output pins will be pin numbers 54 and 55.
+55 inclusive.
 
 In summary:
 
-If BRD_PWM_CNT= 2 then
+If ``BRD_PWM_CNT`` = 2 then
 
 50 = RC9
 
@@ -707,7 +714,7 @@ If BRD_PWM_CNT= 2 then
 
 55 = Aux 6
 
-If BRD_PWM_CNT= 4 then
+If ``BRD_PWM_CNT`` = 4 then
 
 50 = RC9
 
@@ -721,7 +728,7 @@ If BRD_PWM_CNT= 4 then
 
 55 = Aux 6
 
-If BRD_PWM_CNT= 6 then
+If ``BRD_PWM_CNT`` = 6 then
 
 50 = RC9
 
@@ -737,7 +744,7 @@ If BRD_PWM_CNT= 6 then
 
 By default, the pins are digital outputs as outlined above. A digital
 pin will instead be a digital input if it is assigned to a parameter
-that represents a digital input. For example, setting :ref:`CAM_FEEDBACK_PIN<CAM_FEEDBACK_PIN>`
+that represents a digital input. For example, setting :ref:`CAM1_FEEDBAK_PIN<CAM1_FEEDBAK_PIN>`
 to 50 will make pin 50 the digital input that receives a signal from the
 camera when a picture has been taken.
 
@@ -769,3 +776,5 @@ See also
     Mounting the Autopilot <common-mounting-the-flight-controller>
     Compatible RC Transmitter and Receiver Systems <common-rc-systems>
 [/site]
+
+[copywiki destination="plane,copter,rover,blimp"]
